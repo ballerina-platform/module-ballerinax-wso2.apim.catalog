@@ -1,2 +1,2 @@
-# module-ballerinax-wso2.apim.catalog
-Integrate Ballerina services with the WSO2 APIM Service catalog feature.
+# wso2.apim.catalog
+This repository is for Including ballerina service management tools for publishing service data to WSO2 API manager service catalogs.
