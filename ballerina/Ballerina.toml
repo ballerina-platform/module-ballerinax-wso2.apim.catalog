@@ -2,7 +2,7 @@
 org = "ballerinax"
 name = "wso2.apim.catalog"
 version = "0.1.0"
-distribution = "2201.9.0-SNAPSHOT"
+distribution = "2201.9.0"
 
 [[platform.java17.dependency]]
 groupId = "io.ballerina"
