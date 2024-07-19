@@ -8,7 +8,7 @@ distribution = "2201.9.0-SNAPSHOT"
 groupId = "io.ballerina"
 artifactId = "wso2.apim.catalog-native"
 version = "0.1.0"
-path = "../native/build/libs/wso2.apim.catalog-native-0.1.0.jar"
+path = "../native/build/libs/wso2.apim.catalog-native-0.1.0-SNAPSHOT.jar"
 
 [[platform.java17.dependency]]
 groupId = "com.fasterxml.jackson.core"
