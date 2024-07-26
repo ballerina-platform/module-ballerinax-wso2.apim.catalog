@@ -80,24 +80,29 @@ public class OpenAPIAnnotationModifier implements ModifierTask<SourceModifierCon
         for (Module module: currentPackage.modules()) {
             Collection<DocumentId> documentIds = module.documentIds();
             for (DocumentId documentId: documentIds) {
-                Document document = module.document(documentId);
-                SyntaxTree syntaxTree = document.syntaxTree();
-                ModulePartNode rootNode = syntaxTree.rootNode();
-                SemanticModel semanticModel = context.compilation().getSemanticModel(module.moduleId());
-                NodeList<ImportDeclarationNode> newImports = updateImports(rootNode.imports(), rootNode.members());
-
-                NodeList<ModuleMemberDeclarationNode> newMembers = updateMemberNodes(
-                        syntaxTree, currentPackage, document,
-                        currentPackage.project(), rootNode.members(), semanticModel);
-                ModulePartNode newModulePart = rootNode.modify(newImports, newMembers, rootNode.eofToken());
-                SyntaxTree updatedSyntaxTree = syntaxTree.modifyWith(newModulePart);
-                TextDocument textDocument = updatedSyntaxTree.textDocument();
-                if (documentIds.contains(documentId)) {
-                    context.modifySourceFile(textDocument, documentId);
-                } else {
-                    context.modifyTestSourceFile(textDocument, documentId);
-                }
+                modifyDocument(context, currentPackage, module, documentIds, documentId);
             }
+        }
+    }
+
+    private void modifyDocument(SourceModifierContext context, Package currentPackage, Module module,
+                                Collection<DocumentId> documentIds, DocumentId documentId) {
+        Document document = module.document(documentId);
+        SyntaxTree syntaxTree = document.syntaxTree();
+        ModulePartNode rootNode = syntaxTree.rootNode();
+        SemanticModel semanticModel = context.compilation().getSemanticModel(module.moduleId());
+        NodeList<ImportDeclarationNode> newImports = updateImports(rootNode.imports(), rootNode.members());
+
+        NodeList<ModuleMemberDeclarationNode> newMembers = updateMemberNodes(
+                syntaxTree, currentPackage, document,
+                currentPackage.project(), rootNode.members(), semanticModel);
+        ModulePartNode newModulePart = rootNode.modify(newImports, newMembers, rootNode.eofToken());
+        SyntaxTree updatedSyntaxTree = syntaxTree.modifyWith(newModulePart);
+        TextDocument textDocument = updatedSyntaxTree.textDocument();
+        if (documentIds.contains(documentId)) {
+            context.modifySourceFile(textDocument, documentId);
+        } else {
+            context.modifyTestSourceFile(textDocument, documentId);
         }
     }
 

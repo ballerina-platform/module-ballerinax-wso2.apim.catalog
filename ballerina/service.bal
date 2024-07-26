@@ -28,7 +28,7 @@ configurable string tokenUrl = "https://localhost:9443/oauth2/token";
 configurable int port = 5050;
 configurable string clientSecureSocketpath = "";
 configurable string clientSecureSocketpassword = "";
-configurable string serverCert = "";
+configurable string? serverCert = ();
 configurable string[] scopes = ["service_catalog:service_view", "apim:api_view", "service_catalog:service_write"];
 
 listener Listener 'listener = new Listener(port);
@@ -38,6 +38,7 @@ service / on 'listener {
 }
 
 function publishArtifacts(ServiceArtifact[] artifacts) returns error? {
+    error? e = ();
     Client|error apimClient = new (serviceUrl = serviceUrl, config = {
         auth: {
             username,
@@ -52,20 +53,14 @@ function publishArtifacts(ServiceArtifact[] artifacts) returns error? {
     });
 
     if apimClient is error {
-        log:printError("Error occurred while creating the client", apimClient);
+        log:printError("Error occurred while creating the client: ", apimClient);
         return apimClient;
     }
 
-    boolean errorFound = false;
-    error? e = null;
-
     foreach ServiceArtifact artifact in artifacts {
-        string name = artifact.name;
-        string definitionFileContent = artifact.definitionFileContent;
-
         Service|error res = apimClient->/services.post({
             serviceMetadata: {
-                name,
+                name: artifact.name,
                 description: artifact.description,
                 'version: artifact.version,
                 serviceKey: artifact.serviceKey,
@@ -75,19 +70,15 @@ function publishArtifacts(ServiceArtifact[] artifacts) returns error? {
                 mutualSSLEnabled: artifact.mutualSSLEnabled,
                 definitionUrl: artifact.definitionUrl
             },
-            inlineContent: definitionFileContent
+            inlineContent: artifact.definitionFileContent
         });
 
         // If there is an error, wait until other artifacts get published
-        if !errorFound && res is error {
+        if res is error {
             e = res;
-            errorFound = true;
         }
     }
-
-    if errorFound {
-        return e;
-    }
+    return e;
 }
 
 isolated function getArtifacts() returns ServiceArtifact[] = @java:Method {
@@ -102,8 +93,8 @@ function getClientConfig(string clientSecureSocketpath, string clientSecureSocke
     return {secureSocket: {cert: {path: clientSecureSocketpath, password: clientSecureSocketpassword}}};
 }
 
-function getServerCert(string serverCert) returns http:ClientSecureSocket? {
-    if serverCert != "" {
+function getServerCert(string? serverCert) returns http:ClientSecureSocket? {
+    if serverCert != null {
         return {cert: serverCert};
     }
     return {enable: false};

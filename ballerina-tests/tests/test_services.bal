@@ -32,7 +32,7 @@ function testSingleService() returns error? {
 function testSingleService2() returns error? {
     int index = 1;
     string file = string `artifacts_${index}.json`;
-    
+
     // In here error will be the expected behaviour since currently it is the only way to terminate the processes.
     // Currently ballerina/os module does not support a way to terminate the processes.
     error? result = runOSCommand(getProjName(index), getProjPath(index), getConfigFilePath(index));

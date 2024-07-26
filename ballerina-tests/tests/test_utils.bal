@@ -42,15 +42,15 @@ function runOSCommand(string projName, string projPath, string configFilePath) r
         return process;
     }
 
-    int|os:Error waitForExit = process.waitForExit();
+    int|os:Error exitStatus = process.waitForExit();
 
-    if waitForExit is os:Error {
+    if exitStatus is os:Error {
         log:printInfo(
-            string `Error while waiting for exit in :- ${projName}, e = ${waitForExit.message()}`);
-        return waitForExit;
+            string `Error while waiting for exit in :- ${projName}, e = ${exitStatus.message()}`);
+        return exitStatus;
     } else {
         string output = check string:fromBytes(check process.output(io:stderr));
-        if waitForExit != 0 {
+        if exitStatus != 0 {
             return error(string `${output}`);
         }
     }
@@ -89,7 +89,7 @@ function returnDummyResponse(string message = "Return 500 Status code after comp
 }
 
 function readAndValidateArtifacts(string file, int index, string basePathPrefix = "/sales") {
-    json|error artifactJson = io:fileReadJson(string `${artifactPath}/${file}`);
+    json|error artifactJson = io:fileReadJson(string `${artifactPath}${sep}${file}`);
 
     if artifactJson is error {
         test:assertFail(string `Error while reading the ${file}`);
@@ -106,7 +106,7 @@ function readAndValidateArtifacts(string file, int index, string basePathPrefix 
 function validateArtifacts(ServiceSchema[] artifacts, int index, string basePathPrefix) {
     string assertPath = string `${ballerinaTestDir}${sep}asserts`;
     string assertFile = string `assert_${index}.json`;
-    json|error assertJson = io:fileReadJson(string `${assertPath}/${assertFile}`);
+    json|error assertJson = io:fileReadJson(string `${assertPath}${sep}${assertFile}`);
 
     if assertJson is error {
         test:assertFail(string `Error while reading the ${assertFile}`);
@@ -125,7 +125,7 @@ function validateArtifacts(ServiceSchema[] artifacts, int index, string basePath
             test:assertFail(string `Service key ${serviceKey} not found in assert file ${assertFile}`);
         }
 
-        ServiceSchema assertSchema = <ServiceSchema> assertArtifacts[serviceKey];
+        ServiceSchema assertSchema = assertArtifacts.get(serviceKey);
         if isNameStartWithSamePrefix(assertSchema.serviceMetadata.name, 
                 schema.serviceMetadata.name, basePathPrefix) {
             assertSchema.serviceMetadata.name = schema.serviceMetadata.name;

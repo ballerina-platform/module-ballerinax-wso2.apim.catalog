@@ -176,6 +176,6 @@ service / on new http:Listener(8091) {
         ServiceSchema schema = check traverseMultiPartRequest(req);
         self.artifacts.push(schema);
         check io:fileWriteJson(self.artifactJsonFilename, self.artifacts.toJson());
-        return {body:  {message: "Unauthorized"}};
+        return {body: {message: "Unauthorized"}};
     }
 }

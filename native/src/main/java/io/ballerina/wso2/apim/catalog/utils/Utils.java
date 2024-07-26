@@ -110,31 +110,27 @@ public class Utils {
 
         StringBuilder sb = new StringBuilder();
         sb.append(SLASH);
-        for (int i = 0, attachPointsLength = attachPoints.length; i < attachPointsLength; i++) {
+        for (int i = 0; i < attachPoints.length; i++) {
             sb.append(attachPoints[i]).append(SLASH);
         }
         return sb.substring(0, sb.length() - 1);
     }
 
     public static BMap<BString, Object> getModuleAnnotation(BMap<BString, Object> annotations) {
-        if (annotations != null) {
-            for (BString key : annotations.getKeys()) {
-                String[] annotNames = StringUtils.getStringValue(key).split(COLON);
-                if (annotNames[0].equals(COMPLETE_MODULE_NAME) &&
-                        annotNames[annotNames.length - 1].equals(SERVICE_CATALOG_METADATA_ANNOTATION_IDENTIFIER)) {
-                    return (BMap<BString, Object>) annotations.get(key);
-                }
-            }
-        }
-        return null;
+        return getAnnotation(COMPLETE_MODULE_NAME, SERVICE_CATALOG_METADATA_ANNOTATION_IDENTIFIER, annotations);
     }
 
     public static BMap<BString, Object> getHttpAnnotation(BMap<BString, Object> annotations) {
+        return getAnnotation(HTTP_MODULE_NAME, HTTP_ANNOTATION_NAME, annotations);
+    }
+
+    public static BMap<BString, Object> getAnnotation(String moduleName, String annotationName,
+                                                      BMap<BString, Object> annotations) {
         if (annotations != null) {
             for (BString key : annotations.getKeys()) {
                 String[] annotNames = StringUtils.getStringValue(key).split(COLON);
-                if (annotNames[0].equals(HTTP_MODULE_NAME) &&
-                        annotNames[annotNames.length - 1].equals(HTTP_ANNOTATION_NAME)) {
+                if (annotNames[0].equals(moduleName) &&
+                        annotNames[annotNames.length - 1].equals(annotationName)) {
                     return (BMap<BString, Object>) annotations.get(key);
                 }
             }

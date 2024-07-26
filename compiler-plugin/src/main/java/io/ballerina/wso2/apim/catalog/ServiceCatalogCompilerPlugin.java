@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2024, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2024, WSO2 LLC. (http://www.wso2.com) All Rights Reserved.
  *
- * WSO2 Inc. licenses this file to you under the Apache License,
+ * WSO2 LLC. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License.
  * You may obtain a copy of the License at
@@ -23,6 +23,7 @@ import io.ballerina.projects.plugins.CompilerPluginContext;
 import io.ballerina.wso2.apim.catalog.codemodifier.ServiceCatalogModifier;
 
 /**
+ * @since 0.1.0
  * Compiler plugin for WSO2 API manager service catalog client.
  */
 public class ServiceCatalogCompilerPlugin extends CompilerPlugin {

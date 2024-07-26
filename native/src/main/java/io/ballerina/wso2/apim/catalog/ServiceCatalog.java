@@ -67,6 +67,10 @@ import static io.ballerina.wso2.apim.catalog.utils.Constants.SERVICE_KEY;
 import static io.ballerina.wso2.apim.catalog.utils.Constants.SERVICE_URL;
 import static io.ballerina.wso2.apim.catalog.utils.Constants.VERSION;
 
+/**
+ * @since 0.1.0
+ * Provide functionality to retrieve artifacts details.
+ */
 public class ServiceCatalog {
 
     public static BArray getArtifacts(Environment env) {
@@ -135,7 +139,6 @@ public class ServiceCatalog {
         artifactValues.put(StringUtils.fromString(MD5), StringUtils.fromString(createMd5Hash(string)));
     }
 
-
     private static void updateServiceNameAndUrl(BMap<BString, Object> artifactValues,
                                                 HttpServiceConfig httpServiceConfig) {
         updateServiceName(artifactValues, httpServiceConfig);
@@ -146,24 +149,18 @@ public class ServiceCatalog {
         artifactValues.put(StringUtils.fromString(MUTUAL_SSL_ENABLED), getMutualSSLDetails(listenerDetails));
     }
 
-
     private static boolean getMutualSSLDetails(Object listenerDetails) {
         ArrayList<BObject> listenerArray = (ArrayList<BObject>) listenerDetails;
         if (listenerArray.size() > 0) {
             BObject listener = listenerArray.get(0);
             if (listener != null) {
                 Object configObject = listener.getNativeData(CONFIG);
-                if (configObject instanceof HashMap) {
-                    HashMap<BString, BString> config = (HashMap<BString, BString>) configObject;
-                    if (config.containsKey(StringUtils.fromString(SECURE_SOCKET))) {
-                        Object secureSocketObject = config.get(StringUtils.fromString(SECURE_SOCKET));
-                        if (secureSocketObject instanceof HashMap) {
-                            HashMap<BString, BString> secureSocket =
-                                    (HashMap<BString, BString>) secureSocketObject;
-                            if (secureSocket.containsKey(StringUtils.fromString(MUTUAL_SSL))) {
-                                return true;
-                            }
-                        }
+                if (configObject instanceof HashMap config
+                        && config.containsKey(StringUtils.fromString(SECURE_SOCKET))) {
+                    Object secureSocketObject = config.get(StringUtils.fromString(SECURE_SOCKET));
+                    if (secureSocketObject instanceof HashMap secureSocket
+                            && secureSocket.containsKey(StringUtils.fromString(MUTUAL_SSL))) {
+                        return true;
                     }
                 }
             }
