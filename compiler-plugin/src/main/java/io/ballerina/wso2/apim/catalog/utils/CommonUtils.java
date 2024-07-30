@@ -44,6 +44,11 @@ import io.ballerina.tools.diagnostics.DiagnosticSeverity;
 import java.nio.charset.Charset;
 import java.util.Base64;
 
+/**
+ * Common utility functions used in the service catalog.
+ *
+ * @since 0.1.0
+ */
 public class CommonUtils {
     public static final MinutiaeList SINGLE_WS_MINUTIAE = getSingleWSMinutiae();
 

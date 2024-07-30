@@ -16,6 +16,11 @@
 
 package io.ballerina.wso2.apim.catalog.utils;
 
+/**
+ * Constants used in the service catalog.
+ *
+ * @since 0.1.0
+ */
 public class Constants {
     public static final String SLASH = "/";
     public static final String SERVICE_CATALOG_PACKAGE_NAME = "wso2.apim.catalog";

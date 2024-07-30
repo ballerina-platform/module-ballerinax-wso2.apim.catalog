@@ -48,6 +48,11 @@ import static io.ballerina.wso2.apim.catalog.utils.Constants.SERVICE_CATALOG_MET
 import static io.ballerina.wso2.apim.catalog.utils.Constants.SLASH;
 import static io.ballerina.wso2.apim.catalog.utils.Constants.UTF8;
 
+/**
+ * Utility functions used in the service catalog.
+ *
+ * @since 0.1.0
+ */
 public class Utils {
     public static String createMd5Hash(String string) {
         try {

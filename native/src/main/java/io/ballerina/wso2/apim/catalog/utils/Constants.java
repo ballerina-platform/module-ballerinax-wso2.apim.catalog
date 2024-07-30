@@ -16,7 +16,12 @@
 
 package io.ballerina.wso2.apim.catalog.utils;
 
-public class Constants {
+/**
+ * Constants used in the service catalog.
+ *
+ * @since 0.1.0
+ */
+public final class Constants {
     public static final String SERVICE_ARTIFACT_TYPE_NAME = "ServiceArtifact";
     public static final String LISTENERS = "listeners";
     public static final String ATTACH_POINT = "attachPoint";
@@ -57,5 +62,9 @@ public class Constants {
     public static final String JWT_AUTH = "jwtValidatorConfig";
     public static final String OAUTH2_AUTH = "oauth2IntrospectionConfig";
     public static final String DEFAULT_STRING = "";
-    public static final String HTTP_ORG_NAME = "http";
+    public static final String HTTP_PACKAGE_NAME = "http";
+    public static final String BALLERINA = "ballerina";
+
+    private Constants() {
+    }
 }

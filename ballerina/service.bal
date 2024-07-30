@@ -26,7 +26,7 @@ configurable string? clientId = ();
 configurable string? clientSecret = ();
 configurable string tokenUrl = "https://localhost:9443/oauth2/token";
 configurable int port = 5050;
-configurable string clientSecureSocketpath = "";
+configurable string? clientSecureSocketpath = ();
 configurable string clientSecureSocketpassword = "";
 configurable string? serverCert = ();
 configurable string[] scopes = ["service_catalog:service_view", "apim:api_view", "service_catalog:service_write"];
@@ -85,9 +85,9 @@ isolated function getArtifacts() returns ServiceArtifact[] = @java:Method {
     'class: "io.ballerina.wso2.apim.catalog.ServiceCatalog"
 } external;
 
-function getClientConfig(string clientSecureSocketpath, string clientSecureSocketpassword)
+function getClientConfig(string? clientSecureSocketpath, string clientSecureSocketpassword)
         returns oauth2:ClientConfiguration {
-    if clientSecureSocketpath == "" {
+    if clientSecureSocketpath == () {
         return {secureSocket: {disable: true}};
     }
     return {secureSocket: {cert: {path: clientSecureSocketpath, password: clientSecureSocketpassword}}};

@@ -67,6 +67,11 @@ import static io.ballerina.wso2.apim.catalog.utils.CommonUtils.getServiceCatalog
 import static io.ballerina.wso2.apim.catalog.utils.CommonUtils.isServiceCatalogConfigAnnotationAvailable;
 import static io.ballerina.wso2.apim.catalog.utils.Constants.SLASH;
 
+/**
+ * A {@code OpenAPIAnnotationModifier} class to modify the service catalog annotations.
+ *
+ * @since 0.1.0
+ */
 public class OpenAPIAnnotationModifier implements ModifierTask<SourceModifierContext> {
 
     @Override
@@ -139,7 +144,7 @@ public class OpenAPIAnnotationModifier implements ModifierTask<SourceModifierCon
             }
 
             ServiceDeclarationNode serviceNode = (ServiceDeclarationNode) memberNode;
-            String openAPIDef = generateOASForgetServiceDeclarationNode(
+            String openAPIDef = generateOASForGivenServiceDeclarationNode(
                     serviceNode, syntaxTree, semanticModel, project, currentPackage, document);
             MetadataNode metadataNode = getMetadataNode(serviceNode);
             MetadataNode.MetadataNodeModifier modifier = metadataNode.modify();
@@ -205,7 +210,7 @@ public class OpenAPIAnnotationModifier implements ModifierTask<SourceModifierCon
             }
         }
         if (openApiDefAvailable) {
-            if (fields.size() != 0) {
+            if (!fields.isEmpty()) {
                 fields.remove(fields.size() - 1);
             }
         } else {
@@ -214,9 +219,9 @@ public class OpenAPIAnnotationModifier implements ModifierTask<SourceModifierCon
         return NodeFactory.createSeparatedNodeList(fields);
     }
 
-    private String generateOASForgetServiceDeclarationNode(ServiceDeclarationNode serviceDeclarationNode,
-                                       SyntaxTree syntaxTree, SemanticModel semanticModel,
-                                       Project project, Package currentPackage, Document document) {
+    private String generateOASForGivenServiceDeclarationNode(ServiceDeclarationNode serviceDeclarationNode,
+                                         SyntaxTree syntaxTree, SemanticModel semanticModel,
+                                         Project project, Package currentPackage, Document document) {
         String openApiFilename = getOpenApiFileName(
                 syntaxTree.filePath(), getServiceBasePath(serviceDeclarationNode), false);
         Optional<Path> path = currentPackage.project().documentPath(document.documentId());
@@ -233,8 +238,7 @@ public class OpenAPIAnnotationModifier implements ModifierTask<SourceModifierCon
         if (openApi.getInfo().getTitle() == null || openApi.getInfo().getTitle().equals(SLASH)) {
             openApi.getInfo().setTitle(normalizeTitle(openApiFilename));
         }
-        String openApiDefinition = Yaml.pretty(openApi);
-        return openApiDefinition;
+        return Yaml.pretty(openApi);
     }
 
     public static OASResult generateOASForService(ServiceDeclarationNode serviceDeclarationNode,

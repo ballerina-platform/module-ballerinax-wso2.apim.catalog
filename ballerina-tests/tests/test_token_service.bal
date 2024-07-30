@@ -18,7 +18,7 @@ import ballerina/http;
 import ballerina/log;
 
 const ACCESS_TOKEN_1 = "2YotnFZFEjr1zCsicMWpAA";
-const string keyStorePassword = "ballerina";
+const keyStorePassword = "ballerina";
 
 string keystorePath = string `${currentDir}${sep}tests${sep}resources${sep}ballerinaKeystore.p12`;
 public type AuthResponse record {|

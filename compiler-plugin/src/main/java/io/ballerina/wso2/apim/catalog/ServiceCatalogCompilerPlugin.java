@@ -23,8 +23,9 @@ import io.ballerina.projects.plugins.CompilerPluginContext;
 import io.ballerina.wso2.apim.catalog.codemodifier.ServiceCatalogModifier;
 
 /**
- * @since 0.1.0
  * Compiler plugin for WSO2 API manager service catalog client.
+ *
+ * @since 0.1.0
  */
 public class ServiceCatalogCompilerPlugin extends CompilerPlugin {
     @Override

@@ -1,4 +1,7 @@
 import ballerina/http;
+import ballerina/openapi;
+import ballerinax/wso2.apim.catalog as _;
+
 // Copyright (c) 2024, WSO2 LLC. (https://www.wso2.com).
 //
 // WSO2 LLC. licenses this file to you under the Apache License,
@@ -14,9 +17,6 @@ import ballerina/http;
 // KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations
 // under the License.
-
-import ballerinax/wso2.apim.catalog as _;
-import ballerina/openapi;
 
 @http:ServiceConfig {
     host: "www.example.com"

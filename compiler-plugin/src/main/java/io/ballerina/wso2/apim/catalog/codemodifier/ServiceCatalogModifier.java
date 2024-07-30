@@ -19,6 +19,11 @@ package io.ballerina.wso2.apim.catalog.codemodifier;
 import io.ballerina.projects.plugins.CodeModifier;
 import io.ballerina.projects.plugins.CodeModifierContext;
 
+/**
+ * Service catalog modifier.
+ *
+ * @since 0.1.0
+ */
 public class ServiceCatalogModifier extends CodeModifier {
 
     @Override

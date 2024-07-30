@@ -38,7 +38,8 @@ import io.swagger.v3.oas.models.OpenAPI;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static io.ballerina.wso2.apim.catalog.utils.Constants.HTTP_ORG_NAME;
+import static io.ballerina.wso2.apim.catalog.utils.Constants.BALLERINA;
+import static io.ballerina.wso2.apim.catalog.utils.Constants.HTTP_PACKAGE_NAME;
 import static io.ballerina.wso2.apim.catalog.utils.Utils.createMd5Hash;
 import static io.ballerina.wso2.apim.catalog.utils.Utils.generateBasePath;
 import static io.ballerina.wso2.apim.catalog.utils.Utils.getDefinitionType;
@@ -68,8 +69,9 @@ import static io.ballerina.wso2.apim.catalog.utils.Constants.SERVICE_URL;
 import static io.ballerina.wso2.apim.catalog.utils.Constants.VERSION;
 
 /**
- * @since 0.1.0
  * Provide functionality to retrieve artifacts details.
+ *
+ * @since 0.1.0
  */
 public class ServiceCatalog {
 
@@ -104,8 +106,9 @@ public class ServiceCatalog {
     }
 
     private static boolean isHttpServiceNode(Object listenerDetails) {
-        return (((ArrayList<BObject>) listenerDetails).get(0)).getOriginalType().
-                getPackage().getName().equals(HTTP_ORG_NAME);
+        Module pkg = (((ArrayList<BObject>) listenerDetails).get(0)).getOriginalType().
+                getPackage();
+        return pkg.getOrg().equals(BALLERINA) && pkg.getName().equals(HTTP_PACKAGE_NAME);
     }
 
     private static Object getAnnotations(Object serviceObj) {
@@ -151,17 +154,15 @@ public class ServiceCatalog {
 
     private static boolean getMutualSSLDetails(Object listenerDetails) {
         ArrayList<BObject> listenerArray = (ArrayList<BObject>) listenerDetails;
-        if (listenerArray.size() > 0) {
+        if (!listenerArray.isEmpty()) {
             BObject listener = listenerArray.get(0);
             if (listener != null) {
                 Object configObject = listener.getNativeData(CONFIG);
                 if (configObject instanceof HashMap config
                         && config.containsKey(StringUtils.fromString(SECURE_SOCKET))) {
                     Object secureSocketObject = config.get(StringUtils.fromString(SECURE_SOCKET));
-                    if (secureSocketObject instanceof HashMap secureSocket
-                            && secureSocket.containsKey(StringUtils.fromString(MUTUAL_SSL))) {
-                        return true;
-                    }
+                    return secureSocketObject instanceof HashMap secureSocket
+                            && secureSocket.containsKey(StringUtils.fromString(MUTUAL_SSL));
                 }
             }
         }

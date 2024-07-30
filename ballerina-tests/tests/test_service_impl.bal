@@ -18,11 +18,11 @@ import ballerina/http;
 import ballerina/io;
 import ballerina/log;
 
-final readonly & string artifactPath = string `${ballerinaTestDir}${sep}generated_artifacts`;
+final string artifactPath = string `${ballerinaTestDir}${sep}generated_artifacts`;
 
 service / on new http:Listener(8080) {
     ServiceSchema[] artifacts = [];
-    final readonly & string artifactJsonFilename = string `${artifactPath}${sep}artifacts_0.json`;
+    final string artifactJsonFilename = string `${artifactPath}${sep}artifacts_0.json`;
 
     function init() returns error? {
         log:printInfo("Starting the test server on port 8080");
@@ -38,7 +38,7 @@ service / on new http:Listener(8080) {
 
 service / on new http:Listener(8081) {
     ServiceSchema[] artifacts = [];
-    final readonly & string artifactJsonFilename = string `${artifactPath}${sep}artifacts_1.json`;
+    final string artifactJsonFilename = string `${artifactPath}${sep}artifacts_1.json`;
 
     function init() returns error? {
         log:printInfo("Starting the test server on port 8081");
@@ -54,7 +54,7 @@ service / on new http:Listener(8081) {
 
 service / on new http:Listener(8082) {
     ServiceSchema[] artifacts = [];
-    final readonly & string artifactJsonFilename = string `${artifactPath}${sep}artifacts_2.json`;
+    final string artifactJsonFilename = string `${artifactPath}${sep}artifacts_2.json`;
 
     function init() returns error? {
         log:printInfo("Starting the test server on port 8082");
@@ -70,7 +70,7 @@ service / on new http:Listener(8082) {
 
 service / on new http:Listener(8083) {
     ServiceSchema[] artifacts = [];
-    final readonly & string artifactJsonFilename = string `${artifactPath}${sep}artifacts_3.json`;
+    final string artifactJsonFilename = string `${artifactPath}${sep}artifacts_3.json`;
 
     function init() returns error? {
         log:printInfo("Starting the test server on port 8083");
@@ -86,7 +86,7 @@ service / on new http:Listener(8083) {
 
 service / on new http:Listener(8084) {
     ServiceSchema[] artifacts = [];
-    final readonly & string artifactJsonFilename = string `${artifactPath}${sep}artifacts_4.json`;
+    final string artifactJsonFilename = string `${artifactPath}${sep}artifacts_4.json`;
 
     function init() returns error? {
         log:printInfo("Starting the test server on port 8084");
@@ -102,7 +102,7 @@ service / on new http:Listener(8084) {
 
 service / on new http:Listener(8085) {
     ServiceSchema[] artifacts = [];
-    final readonly & string artifactJsonFilename = string `${artifactPath}${sep}artifacts_5.json`;
+    final string artifactJsonFilename = string `${artifactPath}${sep}artifacts_5.json`;
 
     function init() returns error? {
         log:printInfo("Starting the test server on port 8085");
@@ -118,7 +118,7 @@ service / on new http:Listener(8085) {
 
 service / on new http:Listener(8086) {
     ServiceSchema[] artifacts = [];
-    final readonly & string artifactJsonFilename = string `${artifactPath}${sep}artifacts_6.json`;
+    final string artifactJsonFilename = string `${artifactPath}${sep}artifacts_6.json`;
 
     function init() returns error? {
         log:printInfo("Starting the test server on port 8086");
@@ -134,7 +134,7 @@ service / on new http:Listener(8086) {
 
 service / on new http:Listener(8087) {
     ServiceSchema[] artifacts = [];
-    final readonly & string artifactJsonFilename = string `${artifactPath}${sep}artifacts_7.json`;
+    final string artifactJsonFilename = string `${artifactPath}${sep}artifacts_7.json`;
 
     function init() returns error? {
         log:printInfo("Starting the test server on port 8087");
@@ -150,7 +150,7 @@ service / on new http:Listener(8087) {
 
 service / on new http:Listener(8088) {
     ServiceSchema[] artifacts = [];
-    final readonly & string artifactJsonFilename = string `${artifactPath}${sep}artifacts_8.json`;
+    final string artifactJsonFilename = string `${artifactPath}${sep}artifacts_8.json`;
 
     function init() returns error? {
         log:printInfo("Starting the test server on port 8088");
@@ -166,7 +166,7 @@ service / on new http:Listener(8088) {
 
 service / on new http:Listener(8091) {
     ServiceSchema[] artifacts = [];
-    final readonly & string artifactJsonFilename = string `${artifactPath}${sep}artifacts_11.json`;
+    final string artifactJsonFilename = string `${artifactPath}${sep}artifacts_11.json`;
 
     function init() returns error? {
         log:printInfo("Starting the test server on port 8091");
