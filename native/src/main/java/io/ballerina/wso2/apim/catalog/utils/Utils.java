@@ -28,6 +28,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.StringJoiner;
 
 import static io.ballerina.wso2.apim.catalog.utils.Constants.AUTH;
 import static io.ballerina.wso2.apim.catalog.utils.Constants.BASIC;
@@ -53,15 +54,16 @@ import static io.ballerina.wso2.apim.catalog.utils.Constants.UTF8;
  *
  * @since 0.1.0
  */
-public class Utils {
+public final class Utils {
+    private Utils() {
+    }
+
     public static String createMd5Hash(String string) {
         try {
             byte[] bytesOfMessage = string.getBytes(UTF8);
             MessageDigest md = MessageDigest.getInstance(MD5_ALGO_NAME);
             return new String(md.digest(bytesOfMessage), StandardCharsets.UTF_8);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchAlgorithmException e) {
+        } catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     }
@@ -113,12 +115,11 @@ public class Utils {
             return SLASH;
         }
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(SLASH);
+        StringJoiner sj = new StringJoiner(SLASH, SLASH, "");
         for (int i = 0; i < attachPoints.length; i++) {
-            sb.append(attachPoints[i]).append(SLASH);
+            sj.add(attachPoints[i]);
         }
-        return sb.substring(0, sb.length() - 1);
+        return sj.toString();
     }
 
     public static BMap<BString, Object> getModuleAnnotation(BMap<BString, Object> annotations) {

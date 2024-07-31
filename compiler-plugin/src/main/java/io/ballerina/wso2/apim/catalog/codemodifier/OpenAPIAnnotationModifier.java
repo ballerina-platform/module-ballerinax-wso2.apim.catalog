@@ -51,7 +51,6 @@ import io.swagger.v3.oas.models.OpenAPI;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -136,7 +135,7 @@ public class OpenAPIAnnotationModifier implements ModifierTask<SourceModifierCon
     private NodeList<ModuleMemberDeclarationNode> updateMemberNodes(
             SyntaxTree syntaxTree, Package currentPackage, Document document, Project project,
             NodeList<ModuleMemberDeclarationNode> oldMembers, SemanticModel semanticModel) {
-        List<ModuleMemberDeclarationNode> updatedMembers = new LinkedList<>();
+        List<ModuleMemberDeclarationNode> updatedMembers = new ArrayList<>();
         for (ModuleMemberDeclarationNode memberNode : oldMembers) {
             if (memberNode.kind() != SyntaxKind.SERVICE_DECLARATION) {
                 updatedMembers.add(memberNode);
@@ -210,9 +209,7 @@ public class OpenAPIAnnotationModifier implements ModifierTask<SourceModifierCon
             }
         }
         if (openApiDefAvailable) {
-            if (!fields.isEmpty()) {
-                fields.remove(fields.size() - 1);
-            }
+            fields.remove(fields.size() - 1);
         } else {
             fields.add(createOpenApiDefinitionField(openAPIDef));
         }

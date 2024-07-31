@@ -28,6 +28,7 @@ import io.ballerina.compiler.syntax.tree.MappingFieldNode;
 import io.ballerina.compiler.syntax.tree.MetadataNode;
 import io.ballerina.compiler.syntax.tree.Minutiae;
 import io.ballerina.compiler.syntax.tree.MinutiaeList;
+import io.ballerina.compiler.syntax.tree.Node;
 import io.ballerina.compiler.syntax.tree.NodeFactory;
 import io.ballerina.compiler.syntax.tree.NodeList;
 import io.ballerina.compiler.syntax.tree.NodeParser;
@@ -49,8 +50,11 @@ import java.util.Base64;
  *
  * @since 0.1.0
  */
-public class CommonUtils {
+public final class CommonUtils {
     public static final MinutiaeList SINGLE_WS_MINUTIAE = getSingleWSMinutiae();
+
+    private CommonUtils() {
+    }
 
     public static MetadataNode getMetadataNode(ServiceDeclarationNode serviceNode) {
         return serviceNode.metadata().orElseGet(() -> {
@@ -92,10 +96,11 @@ public class CommonUtils {
     }
 
     public static boolean isServiceCatalogConfigAnnotationAvailable(AnnotationNode annotationNode) {
-        if (!(annotationNode.annotReference() instanceof QualifiedNameReferenceNode)) {
+        Node node = annotationNode.annotReference();
+        if (!(node instanceof QualifiedNameReferenceNode)) {
             return false;
         }
-        QualifiedNameReferenceNode referenceNode = ((QualifiedNameReferenceNode) annotationNode.annotReference());
+        QualifiedNameReferenceNode referenceNode = ((QualifiedNameReferenceNode) node);
         if (!Constants.CATALOG.equals(referenceNode.modulePrefix().text())) {
             return false;
         }

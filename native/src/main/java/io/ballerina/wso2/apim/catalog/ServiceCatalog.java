@@ -37,6 +37,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static io.ballerina.wso2.apim.catalog.utils.Constants.BALLERINA;
 import static io.ballerina.wso2.apim.catalog.utils.Constants.HTTP_PACKAGE_NAME;
@@ -73,7 +74,9 @@ import static io.ballerina.wso2.apim.catalog.utils.Constants.VERSION;
  *
  * @since 0.1.0
  */
-public class ServiceCatalog {
+public final class ServiceCatalog {
+    private ServiceCatalog() {
+    }
 
     public static BArray getArtifacts(Environment env) {
         Module currentModule = env.getCurrentModule();
@@ -138,7 +141,7 @@ public class ServiceCatalog {
         String openapiDef = StringUtils.getStringValue(artifactValues.get(StringUtils
                 .fromString(DEFINITION_FILE_CONTENT)));
 
-        String string = new StringBuilder(name).append(version).append(definitionType).append(openapiDef).toString();
+        String string = name + version + definitionType + openapiDef;
         artifactValues.put(StringUtils.fromString(MD5), StringUtils.fromString(createMd5Hash(string)));
     }
 
@@ -177,8 +180,8 @@ public class ServiceCatalog {
     private static void updateServiceUrl(BMap<BString, Object> artifactValues, HttpServiceConfig httpServiceConfig) {
         String basePath = httpServiceConfig.basePath.equals(LOCALHOST) ? "" : httpServiceConfig.basePath;
         artifactValues.put(StringUtils.fromString(SERVICE_URL),
-                StringUtils.fromString(new StringBuilder().append(httpServiceConfig.host).
-                        append(COLON).append(httpServiceConfig.port).append(basePath).toString()));
+                StringUtils.fromString(httpServiceConfig.host +
+                        COLON + httpServiceConfig.port + basePath));
         artifactValues.put(StringUtils.fromString(DEFINITION_URL),
                 StringUtils.fromString(httpServiceConfig.definitionUrl));
     }
@@ -194,7 +197,7 @@ public class ServiceCatalog {
     }
 
     private static String getPortValue(Object listenerDetails) {
-        ArrayList<BObject> listenerArray = (ArrayList<BObject>) listenerDetails;
+        List<BObject> listenerArray = (ArrayList<BObject>) listenerDetails;
         return listenerArray.get(0).get(StringUtils.fromString(PORT)).toString();
     }
 
@@ -256,8 +259,7 @@ public class ServiceCatalog {
             this.host = host;
             this.port = port;
             this.basePath = basePath;
-            this.definitionUrl = new StringBuilder().append(host).
-                    append(COLON).append(port).append(basePath).toString();
+            this.definitionUrl = host + COLON + port + basePath;
         }
     }
 }

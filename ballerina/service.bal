@@ -38,7 +38,6 @@ service / on 'listener {
 }
 
 function publishArtifacts(ServiceArtifact[] artifacts) returns error? {
-    error? e = ();
     Client|error apimClient = new (serviceUrl = serviceUrl, config = {
         auth: {
             username,
@@ -57,6 +56,7 @@ function publishArtifacts(ServiceArtifact[] artifacts) returns error? {
         return apimClient;
     }
 
+    error? e = ();
     foreach ServiceArtifact artifact in artifacts {
         Service|error res = apimClient->/services.post({
             serviceMetadata: {
