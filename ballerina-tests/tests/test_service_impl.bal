@@ -29,10 +29,7 @@ service / on new http:Listener(8080) {
     }
 
     resource function post services(http:Request req) returns Service|http:InternalServerError|error {
-        ServiceSchema schema = check traverseMultiPartRequest(req);
-        self.artifacts.push(schema);
-        check io:fileWriteJson(self.artifactJsonFilename, self.artifacts.toJson());
-        return returnDummyResponse();
+        return getSchemaAndReturnResponse(req, self.artifactJsonFilename, self.artifacts);
     }
 }
 
@@ -45,10 +42,7 @@ service / on new http:Listener(8081) {
     }
 
     resource function post services(http:Request req) returns Service|http:InternalServerError|error {
-        ServiceSchema schema = check traverseMultiPartRequest(req);
-        self.artifacts.push(schema);
-        check io:fileWriteJson(self.artifactJsonFilename, self.artifacts.toJson());
-        return returnDummyResponse();
+        return getSchemaAndReturnResponse(req, self.artifactJsonFilename, self.artifacts);
     }
 }
 
@@ -61,10 +55,7 @@ service / on new http:Listener(8082) {
     }
 
     resource function post services(http:Request req) returns Service|http:InternalServerError|error {
-        ServiceSchema schema = check traverseMultiPartRequest(req);
-        self.artifacts.push(schema);
-        check io:fileWriteJson(self.artifactJsonFilename, self.artifacts.toJson());
-        return returnDummyResponse();
+        return getSchemaAndReturnResponse(req, self.artifactJsonFilename, self.artifacts);
     }
 }
 
@@ -77,10 +68,7 @@ service / on new http:Listener(8083) {
     }
 
     resource function post services(http:Request req) returns Service|http:InternalServerError|error {
-        ServiceSchema schema = check traverseMultiPartRequest(req);
-        self.artifacts.push(schema);
-        check io:fileWriteJson(self.artifactJsonFilename, self.artifacts.toJson());
-        return returnDummyResponse();
+        return getSchemaAndReturnResponse(req, self.artifactJsonFilename, self.artifacts);
     }
 }
 
@@ -93,10 +81,7 @@ service / on new http:Listener(8084) {
     }
 
     resource function post services(http:Request req) returns Service|http:InternalServerError|error {
-        ServiceSchema schema = check traverseMultiPartRequest(req);
-        self.artifacts.push(schema);
-        check io:fileWriteJson(self.artifactJsonFilename, self.artifacts.toJson());
-        return returnDummyResponse();
+        return getSchemaAndReturnResponse(req, self.artifactJsonFilename, self.artifacts);
     }
 }
 
@@ -109,10 +94,7 @@ service / on new http:Listener(8085) {
     }
 
     resource function post services(http:Request req) returns Service|http:InternalServerError|error {
-        ServiceSchema schema = check traverseMultiPartRequest(req);
-        self.artifacts.push(schema);
-        check io:fileWriteJson(self.artifactJsonFilename, self.artifacts.toJson());
-        return returnDummyResponse();
+        return getSchemaAndReturnResponse(req, self.artifactJsonFilename, self.artifacts);
     }
 }
 
@@ -125,10 +107,7 @@ service / on new http:Listener(8086) {
     }
 
     resource function post services(http:Request req) returns Service|http:InternalServerError|error {
-        ServiceSchema schema = check traverseMultiPartRequest(req);
-        self.artifacts.push(schema);
-        check io:fileWriteJson(self.artifactJsonFilename, self.artifacts.toJson());
-        return returnDummyResponse();
+        return getSchemaAndReturnResponse(req, self.artifactJsonFilename, self.artifacts);
     }
 }
 
@@ -141,10 +120,7 @@ service / on new http:Listener(8087) {
     }
 
     resource function post services(http:Request req) returns Service|http:InternalServerError|error {
-        ServiceSchema schema = check traverseMultiPartRequest(req);
-        self.artifacts.push(schema);
-        check io:fileWriteJson(self.artifactJsonFilename, self.artifacts.toJson());
-        return returnDummyResponse();
+        return getSchemaAndReturnResponse(req, self.artifactJsonFilename, self.artifacts);
     }
 }
 
@@ -157,10 +133,7 @@ service / on new http:Listener(8088) {
     }
 
     resource function post services(http:Request req) returns Service|http:InternalServerError|error {
-        ServiceSchema schema = check traverseMultiPartRequest(req);
-        self.artifacts.push(schema);
-        check io:fileWriteJson(self.artifactJsonFilename, self.artifacts.toJson());
-        return returnDummyResponse();
+        return getSchemaAndReturnResponse(req, self.artifactJsonFilename, self.artifacts);
     }
 }
 
@@ -178,4 +151,12 @@ service / on new http:Listener(8091) {
         check io:fileWriteJson(self.artifactJsonFilename, self.artifacts.toJson());
         return {body: {message: "Unauthorized"}};
     }
+}
+
+function getSchemaAndReturnResponse(http:Request req, 
+        string artifactJsonFilename, ServiceSchema[] artifacts) returns http:InternalServerError|error {
+    ServiceSchema schema = check traverseMultiPartRequest(req);
+    artifacts.push(schema);
+    check io:fileWriteJson(artifactJsonFilename, artifacts.toJson());
+    return returnDummyResponse();
 }
