@@ -7,3 +7,6 @@ path = "../compiler-plugin/build/libs/wso2.apim.catalog-compiler-plugin-@project
 
 [[dependency]]
 path = "lib/ballerina-to-openapi-@openapi.version@.jar"
+
+[platform.java17]
+graalvmCompatible = true

@@ -4,6 +4,9 @@ name = "wso2.apim.catalog"
 version = "0.1.0"
 distribution = "2201.9.0"
 
+[platform.java17]
+graalvmCompatible = true
+
 [[platform.java17.dependency]]
 groupId = "io.ballerina"
 artifactId = "wso2.apim.catalog-native"
