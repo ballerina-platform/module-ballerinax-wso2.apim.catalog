@@ -1,0 +1,80 @@
+[package]
+org = "ballerinax"
+name = "wso2.apim.catalog"
+version = "0.1.0"
+distribution = "2201.9.0"
+
+[platform.java17]
+graalvmCompatible = true
+
+[[platform.java17.dependency]]
+groupId = "io.ballerina"
+artifactId = "wso2.apim.catalog-native"
+version = "@toml.version@"
+path = "../native/build/libs/wso2.apim.catalog-native-@project.version@.jar"
+
+[[platform.java17.dependency]]
+groupId = "com.fasterxml.jackson.core"
+artifactId = "jackson-core"
+version = "@fasterxml.version@"
+path = "lib/jackson-core-@fasterxml.version@.jar"
+
+[[platform.java17.dependency]]
+groupId = "com.fasterxml.jackson.core"
+artifactId = "jackson-databind"
+version = "@fasterxml.version@"
+path = "lib/jackson-databind-@fasterxml.version@.jar"
+
+[[platform.java17.dependency]]
+groupId = "com.fasterxml.jackson.core"
+artifactId = "jackson-annotations"
+version = "@fasterxml.version@"
+path = "lib/jackson-annotations-@fasterxml.version@.jar"
+
+[[platform.java17.dependency]]
+groupId = "com.fasterxml.jackson.datatype"
+artifactId = "jackson-datatype-jsr310"
+version = "@fasterxml.version@"
+path = "lib/jackson-datatype-jsr310-@fasterxml.version@.jar"
+
+[[platform.java17.dependency]]
+groupId = "com.fasterxml.jackson.dataformat"
+artifactId = "jackson-dataformat-yaml"
+version = "@fasterxml.version@"
+path = "lib/jackson-dataformat-yaml-@fasterxml.version@.jar"
+
+[[platform.java17.dependency]]
+groupId = "io.swagger.core.v3"
+artifactId = "swagger-core-jakarta"
+version = "@swagger.version@"
+path = "lib/swagger-core-jakarta-@swagger.version@.jar"
+
+[[platform.java17.dependency]]
+groupId = "io.swagger.core.v3"
+artifactId = "swagger-models"
+version = "@swagger.version@"
+path = "lib/swagger-models-@swagger.version@.jar"
+
+[[platform.java17.dependency]]
+groupId = "io.swagger.parser.v3"
+artifactId = "swagger-parser-v3"
+version = "@swagger.version@"
+path = "lib/swagger-parser-v3-@swagger.parser.version@.jar"
+
+[[platform.java17.dependency]]
+groupId = "io.swagger.parser.v3"
+artifactId = "swagger-parser"
+version = "@swagger.version@"
+path = "lib/swagger-parser-@swagger.parser.version@.jar"
+
+[[platform.java17.dependency]]
+groupId = "io.swagger.parser.v3"
+artifactId = "swagger-parser-core"
+version = "@swagger.version@"
+path = "lib/swagger-parser-core-@swagger.parser.version@.jar"
+
+[[platform.java17.dependency]]
+groupId = "org.yaml"
+artifactId = "snakeyaml"
+version = "@snakeyaml.version@"
+path = "lib/snakeyaml-@snakeyaml.version@.jar"
