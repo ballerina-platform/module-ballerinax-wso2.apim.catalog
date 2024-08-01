@@ -1,0 +1,3 @@
+<suppressions>
+    <suppress checks="NewlineAtEndOfFile" files=".java" />
+</suppressions>
