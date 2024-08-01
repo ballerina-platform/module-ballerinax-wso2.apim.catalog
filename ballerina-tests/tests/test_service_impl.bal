@@ -72,12 +72,12 @@ service / on new http:Listener(8083) {
     }
 }
 
-service / on new http:Listener(8084) {
+service / on new http:Listener(8092) {
     ServiceSchema[] artifacts = [];
     final string artifactJsonFilename = string `${artifactPath}${sep}artifacts_4.json`;
 
     function init() returns error? {
-        log:printInfo("Starting the test server on port 8084");
+        log:printInfo("Starting the test server on port 8092");
     }
 
     resource function post services(http:Request req) returns Service|http:InternalServerError|error {
