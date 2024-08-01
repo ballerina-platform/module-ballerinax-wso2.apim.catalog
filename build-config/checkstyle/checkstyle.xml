@@ -1,0 +1,18 @@
+<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+        "https://checkstyle.org/dtds/configuration_1_3.dtd">
+<module name="Checker">
+    <!-- Other modules -->
+
+    <!-- SuppressionFilter to reference suppressions.xml -->
+    <module name="SuppressionFilter">
+        <property name="file" value="suppressions.xml"/>
+    </module>
+
+    <module name="TreeWalker">
+        <!-- Other checks -->
+        <module name="NewlineAtEndOfFile"/>
+        <!-- Other checks -->
+    </module>
+
+    <!-- Other modules -->
+</module>
