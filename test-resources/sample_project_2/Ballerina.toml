@@ -1,0 +1,14 @@
+[package]
+org = "admin"
+name = "sample_project_2"
+version = "0.1.0"
+distribution = "2201.9.0-SNAPSHOT"
+
+[[dependency]]
+org = "ballerinax"
+name = "wso2.apim.catalog"
+version = "0.1.0"
+repository="local"
+
+[build-options]
+remoteManagement=true
