@@ -55,7 +55,7 @@ service /sales0 on new http:Listener(9602) {
 service /sales0 on new http:Listener(9603) {
 }
 
-#  Example documentation
+# Example documentation
 @http:ServiceConfig {
     auth: [],
     host: "www.example.com"
@@ -63,6 +63,6 @@ service /sales0 on new http:Listener(9603) {
 service /sales0 on new http:Listener(9604) {
     # Example resource doc
     resource function get path() {
-        
+
     }
 }

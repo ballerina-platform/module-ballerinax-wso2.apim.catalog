@@ -60,7 +60,9 @@ service /sales0 on new http:Listener(9402) {
                 groupNameSearchFilter: "",
                 groupNameListFilter: "",
                 membershipAttribute: ""
-            }}],
+            }
+        }
+    ],
     host: "www.example.com"
 }
 service /sales0 on new http:Listener(9403) {

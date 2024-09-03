@@ -27,9 +27,6 @@ import io.ballerina.runtime.api.Module;
  */
 public class ModuleUtils {
 
-    /**
-     * Time standard library package ID.
-     */
     private static Module module = null;
 
     private ModuleUtils() {

@@ -14,9 +14,9 @@
 // specific language governing permissions and limitations
 // under the License.
 
+import ballerina/file;
 import ballerina/http;
 import ballerinax/wso2.apim.catalog as _;
-import ballerina/file;
 
 string ballerinaTestDirPath = file:getCurrentDir();
 string resourcesPath = string `${check file:parentPath(ballerinaTestDirPath)}/test-resources/sample_project_8/resources`;
@@ -30,11 +30,11 @@ listener http:Listener l = check new (9080, {
         key: {
             path: clientStorepath,
             password: clientStorePassword
-        }, 
+        },
         mutualSsl: {
             cert: {
-                    path: clientTrustStorePath,
-                    password: clientTrustStorePassword
+                path: clientTrustStorePath,
+                password: clientTrustStorePassword
             }
         }
     }
@@ -45,7 +45,7 @@ listener http:Listener l2 = check new (9081, {
         key: {
             path: clientStorepath,
             password: clientStorePassword
-        }, 
+        },
         mutualSsl: {
             verifyClient: "OPTIONAL",
             cert: {
@@ -59,9 +59,9 @@ listener http:Listener l2 = check new (9081, {
 listener http:Listener l3 = check new (9082, {
     secureSocket: {
         key: {
-             path: clientStorepath,
+            path: clientStorepath,
             password: clientStorePassword
-        }, 
+        },
         mutualSsl: {
             verifyClient: "REQUIRE",
             cert: {

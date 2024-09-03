@@ -14,26 +14,26 @@
 // specific language governing permissions and limitations
 // under the License.
 
+import ballerina/graphql;
 import ballerina/http;
 import ballerinax/wso2.apim.catalog as _;
 import ballerinax/wso2.apim.catalog as catalog;
-import ballerina/graphql;
 
 @graphql:ServiceConfig {}
 service / on new http:Listener(9700) {
-    
+
 }
 
 // TODO:- Create a issue for websockets
 // @websocket:ServiceConfig {}
 // service / on new websocket:Listener(9701) {
-    
+
 // }
 
 @graphql:ServiceConfig {}
-@catalog:ServiceCatalogConfig{}
+@catalog:ServiceCatalogConfig {}
 service / on new http:Listener(9702) {
-    
+
 }
 
 // @catalog:ServiceCatalogConfig{
@@ -41,5 +41,5 @@ service / on new http:Listener(9702) {
 // }
 // @websocket:ServiceConfig {}
 // service / on new websocket:Listener(9703) {
-    
+
 // }
