@@ -1,0 +1,16 @@
+{
+    "Sales0:localhost:9000/sales0": {
+        "serviceMetadata": {
+            "name": "/sales0AEB9B235D2",
+            "description": "",
+            "version": "0.1.0",
+            "serviceKey": "Sales0:localhost:9000/sales0",
+            "serviceUrl": "localhost:9000/sales0",
+            "definitionType": "OAS3",
+            "securityType": "NONE",
+            "mutualSSLEnabled": false,
+            "definitionUrl": "localhost:9000/sales0"
+        },
+        "inlineContent": "openapi: 3.0.1\ninfo:\n  title: Sales0\n  version: 0.1.0\nservers:\n- url: \"{server}:{port}\/sales0\"\n  variables:\n    server:\n      default: http:\/\/localhost\n    port:\n      default: \"9000\"\npaths: {}\n"
+    }
+}

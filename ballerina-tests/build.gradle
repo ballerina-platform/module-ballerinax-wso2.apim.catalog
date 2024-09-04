@@ -120,6 +120,7 @@ task ballerinaTest {
     dependsOn(":${packageName}-ballerina:build")
     dependsOn(updateTomlVerions)
     dependsOn(initializeVariables)
+    dependsOn(publishTestResourcePackageToLocal)
     finalizedBy(commitTomlFiles)
 
     doLast {

@@ -1,5 +1,3 @@
-# module-ballerinax-wso2.apim.catalog
-Integrate Ballerina services with the WSO2 APIM Service catalog feature.
 # Ballerina WSO2 APIM Catalog Publisher
 
 [![Build](https://github.com/ballerina-platform/module-ballerinax-wso2.apim.catalog/actions/workflows/build-timestamped-master.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-wso2.apim.catalog/actions/workflows/build-timestamped-master.yml)
