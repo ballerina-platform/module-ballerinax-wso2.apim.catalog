@@ -76,5 +76,5 @@ path = "lib/swagger-parser-core-2.1.16.jar"
 [[platform.java17.dependency]]
 groupId = "org.yaml"
 artifactId = "snakeyaml"
-version = "1.29"
-path = "lib/snakeyaml-1.29.jar"
+version = "2.0"
+path = "lib/snakeyaml-2.0.jar"
