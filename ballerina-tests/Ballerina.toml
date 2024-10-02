@@ -1,12 +1,12 @@
 [package]
 org = "ballerinax"
 name = "apim_catalog_tests"
-version = "0.1.0"
+version = "1.0.0"
 
 [[dependency]]
 org = "ballerinax"
 name = "wso2.apim.catalog"
-version = "0.1.0"
+version = "1.0.0"
 repository="local"
 
 [build-options]
@@ -18,5 +18,5 @@ graalvmCompatible = true
 [[platform.java17.dependency]]
 groupId = "io.ballerina"
 artifactId = "wso2.apim.catalog-native"
-version = "0.1.0"
-path = "../native/build/libs/wso2.apim.catalog-native-0.1.0-SNAPSHOT.jar"
+version = "1.0.0"
+path = "../native/build/libs/wso2.apim.catalog-native-1.0.0-SNAPSHOT.jar"
