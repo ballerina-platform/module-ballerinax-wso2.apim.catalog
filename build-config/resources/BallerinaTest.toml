@@ -6,7 +6,7 @@ version = "@toml.version@"
 [[dependency]]
 org = "ballerinax"
 name = "wso2.apim.catalog"
-version = "0.1.0"
+version = "@toml.version@"
 repository="local"
 
 [build-options]
