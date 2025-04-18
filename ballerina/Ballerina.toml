@@ -4,76 +4,76 @@ name = "wso2.apim.catalog"
 version = "1.0.0"
 distribution = "2201.10.0"
 
-[platform.java17]
+[platform.java21]
 graalvmCompatible = true
 
-[[platform.java17.dependency]]
+[[platform.java21.dependency]]
 groupId = "io.ballerina"
 artifactId = "wso2.apim.catalog-native"
 version = "1.0.0"
 path = "../native/build/libs/wso2.apim.catalog-native-1.0.0-SNAPSHOT.jar"
 
-[[platform.java17.dependency]]
+[[platform.java21.dependency]]
 groupId = "com.fasterxml.jackson.core"
 artifactId = "jackson-core"
 version = "2.15.2"
 path = "lib/jackson-core-2.15.2.jar"
 
-[[platform.java17.dependency]]
+[[platform.java21.dependency]]
 groupId = "com.fasterxml.jackson.core"
 artifactId = "jackson-databind"
 version = "2.15.2"
 path = "lib/jackson-databind-2.15.2.jar"
 
-[[platform.java17.dependency]]
+[[platform.java21.dependency]]
 groupId = "com.fasterxml.jackson.core"
 artifactId = "jackson-annotations"
 version = "2.15.2"
 path = "lib/jackson-annotations-2.15.2.jar"
 
-[[platform.java17.dependency]]
+[[platform.java21.dependency]]
 groupId = "com.fasterxml.jackson.datatype"
 artifactId = "jackson-datatype-jsr310"
 version = "2.15.2"
 path = "lib/jackson-datatype-jsr310-2.15.2.jar"
 
-[[platform.java17.dependency]]
+[[platform.java21.dependency]]
 groupId = "com.fasterxml.jackson.dataformat"
 artifactId = "jackson-dataformat-yaml"
 version = "2.15.2"
 path = "lib/jackson-dataformat-yaml-2.15.2.jar"
 
-[[platform.java17.dependency]]
+[[platform.java21.dependency]]
 groupId = "io.swagger.core.v3"
 artifactId = "swagger-core-jakarta"
 version = "2.2.10"
 path = "lib/swagger-core-jakarta-2.2.10.jar"
 
-[[platform.java17.dependency]]
+[[platform.java21.dependency]]
 groupId = "io.swagger.core.v3"
 artifactId = "swagger-models"
 version = "2.2.10"
 path = "lib/swagger-models-2.2.10.jar"
 
-[[platform.java17.dependency]]
+[[platform.java21.dependency]]
 groupId = "io.swagger.parser.v3"
 artifactId = "swagger-parser-v3"
 version = "2.2.10"
 path = "lib/swagger-parser-v3-2.1.16.jar"
 
-[[platform.java17.dependency]]
+[[platform.java21.dependency]]
 groupId = "io.swagger.parser.v3"
 artifactId = "swagger-parser"
 version = "2.2.10"
 path = "lib/swagger-parser-2.1.16.jar"
 
-[[platform.java17.dependency]]
+[[platform.java21.dependency]]
 groupId = "io.swagger.parser.v3"
 artifactId = "swagger-parser-core"
 version = "2.2.10"
 path = "lib/swagger-parser-core-2.1.16.jar"
 
-[[platform.java17.dependency]]
+[[platform.java21.dependency]]
 groupId = "org.yaml"
 artifactId = "snakeyaml"
 version = "2.0"
