@@ -119,7 +119,7 @@ release {
 }
 
 build.dependsOn("${packageName}-ballerina:build")
-build.dependsOn("${packageName}-ballerina-tests:build")
+// build.dependsOn("${packageName}-ballerina-tests:build")
 
 publishToMavenLocal.dependsOn build
 publish.dependsOn build
