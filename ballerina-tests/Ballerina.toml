@@ -12,10 +12,10 @@ repository="local"
 [build-options]
 remoteManagement=true
 
-[platform.java17]
+[platform.java21]
 graalvmCompatible = true
 
-[[platform.java17.dependency]]
+[[platform.java21.dependency]]
 groupId = "io.ballerina"
 artifactId = "wso2.apim.catalog-native"
 version = "1.0.0"
