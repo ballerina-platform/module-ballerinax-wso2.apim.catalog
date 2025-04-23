@@ -37,7 +37,7 @@ service /sales0 on new http:Listener(9502) {
 }
 
 @openapi:ServiceInfo {
-    'version: "1.0.0"
+    'version: "1.1.0"
 }
 service /sales0 on new http:Listener(9503) {
 }
