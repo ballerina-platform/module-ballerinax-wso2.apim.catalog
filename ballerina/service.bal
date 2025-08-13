@@ -56,6 +56,18 @@ function publishArtifacts(ServiceArtifact[] artifacts) returns error? {
         return apimClient;
     }
 
+    Service[]|error services = retrieveAllExisitingservices(apimClient, artifacts);
+    if services is error {
+        log:printError("Error occurred while retrieving existing services: ", services);
+        return services;
+    }
+
+    error? removeResult = removeExistingServices(apimClient, services);
+    if removeResult is error {
+        log:printError("Error occurred while removing existing services: ", removeResult);
+        return removeResult;
+    }   
+
     error? e = ();
     foreach ServiceArtifact artifact in artifacts {
         Service|error res = apimClient->/services.post({
@@ -98,4 +110,59 @@ function getServerCert(string? serverCert) returns http:ClientSecureSocket? {
         return {cert: serverCert};
     }
     return {enable: false};
+}
+
+function retrieveAllExisitingservices(Client apimClient, ServiceArtifact[] artifacts) returns Service[]|error {
+    Service[] services = [];
+    string serviceKeys = getCommaSeparatedServiceKeys(artifacts);
+    boolean isFirstIteration = true;
+    string? next = ();
+    int offset = 0;
+    int 'limit = 25;
+    while isFirstIteration || next != "" {
+        isFirstIteration = false;
+        ServiceList|error serviceList = apimClient->/services(key = serviceKeys, offset = offset, 'limit = 'limit);
+        if serviceList is error {
+            log:printError("Error occurred while retrieving existing services: ", serviceList);
+            return serviceList;
+        }
+
+        Service[]? fetchedServices = serviceList.list;
+        Pagination? pagination = serviceList.pagination;
+        if fetchedServices != () {
+            services.push(...fetchedServices);
+        }
+
+        if pagination == () {
+           next = ""; 
+           continue;
+        }
+
+        string? nextResult = pagination.next;
+        if nextResult == () {
+            next = "";
+            continue;
+        }
+
+        offset += 'limit;
+        next = nextResult;
+    }
+
+    return services;
+}
+
+function removeExistingServices(Client apimClient, Service[] services) returns error? {
+    foreach Service serviceObject in services {
+        string? id = serviceObject.id;
+        if id == () {
+            log:printInfo("Service ID is not available for service: " + serviceObject.serviceKey.toBalString());
+            continue;
+        }
+
+        http:Response|error response = apimClient->/services/[id].delete();
+        if response is error {
+            log:printError("Error occurred while deleting existing service: ", response);
+            return response;
+        }
+    }
 }
