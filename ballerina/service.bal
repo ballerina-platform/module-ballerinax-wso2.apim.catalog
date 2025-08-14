@@ -115,12 +115,9 @@ function getServerCert(string? serverCert) returns http:ClientSecureSocket? {
 function retrieveAllExisitingservices(Client apimClient, ServiceArtifact[] artifacts) returns Service[]|error {
     Service[] services = [];
     string serviceKeys = getCommaSeparatedServiceKeys(artifacts);
-    boolean isFirstIteration = true;
-    string? next = ();
     int offset = 0;
     int 'limit = 25;
-    while isFirstIteration || next != "" {
-        isFirstIteration = false;
+    while true {
         ServiceList|error serviceList = apimClient->/services(key = serviceKeys, offset = offset, 'limit = 'limit);
         if serviceList is error {
             log:printError("Error occurred while retrieving existing services: ", serviceList);
@@ -133,19 +130,11 @@ function retrieveAllExisitingservices(Client apimClient, ServiceArtifact[] artif
             services.push(...fetchedServices);
         }
 
-        if pagination == () {
-           next = ""; 
-           continue;
-        }
-
-        string? nextResult = pagination.next;
-        if nextResult == () {
-            next = "";
-            continue;
+        if pagination?.next == () {
+            break;
         }
 
         offset += 'limit;
-        next = nextResult;
     }
 
     return services;
@@ -155,7 +144,7 @@ function removeExistingServices(Client apimClient, Service[] services) returns e
     foreach Service serviceObject in services {
         string? id = serviceObject.id;
         if id == () {
-            log:printInfo("Service ID is not available for service: " + serviceObject.serviceKey.toBalString());
+            log:printWarn("Service ID is not available for service: " + serviceObject.serviceKey.toBalString());
             continue;
         }
 

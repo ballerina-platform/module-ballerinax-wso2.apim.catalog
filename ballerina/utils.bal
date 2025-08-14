@@ -251,10 +251,5 @@ isolated function createBodyParts(record {|anydata...;|} anyRecord, map<Encoding
     return entities;
 }
 
-function getCommaSeparatedServiceKeys(ServiceArtifact[] artifacts) returns string {
-    string[] serviceKeys = [];
-    foreach ServiceArtifact artifact in artifacts {
-        serviceKeys.push(artifact.serviceKey);
-    }
-    return string:'join(",", ...serviceKeys);
-}
+function getCommaSeparatedServiceKeys(ServiceArtifact[] artifacts) returns string =>
+    string:'join(",", ...from ServiceArtifact artifact in artifacts select artifact.serviceKey);
