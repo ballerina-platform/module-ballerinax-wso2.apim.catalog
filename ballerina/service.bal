@@ -105,8 +105,14 @@ function removeExistingServices(Client apimClient) returns error? {
     foreach string id in publishedServiceIds {
         http:Response|error response = apimClient->/services/[id].delete();
         if response is error {
-            log:printError("Error occurred while deleting existing service: ", response);
+            log:printError("Error occurred while deleting the service: ", response, serviceId = id);
             return response;
+        }
+
+        if response.statusCode != 204 {
+            string responseMessage = (check response.getJsonPayload()).toJsonString();
+            log:printError("Failed to delete service: ", serviceId = id, message = responseMessage);
+            return error("Failed to delete the service with id: " + id, cause = responseMessage);
         }
     }
 }
