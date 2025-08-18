@@ -33,41 +33,26 @@ configurable string[] scopes = ["service_catalog:service_view", "apim:api_view",
 
 listener Listener 'listener = new Listener(port);
 
+Client apimClient = check new (serviceUrl = serviceUrl, config = {
+    auth: {
+        username,
+        tokenUrl,
+        password,
+        clientId,
+        clientSecret,
+        scopes,
+        clientConfig: getClientConfig(clientSecureSocketpath, clientSecureSocketpassword)
+    },
+    secureSocket: getServerCert(serverCert)
+});
+
+ServiceArtifact[] artifacts = [];
+
 service / on 'listener {
 
 }
 
 function publishArtifacts(ServiceArtifact[] artifacts) returns error? {
-    Client|error apimClient = new (serviceUrl = serviceUrl, config = {
-        auth: {
-            username,
-            tokenUrl,
-            password,
-            clientId,
-            clientSecret,
-            scopes,
-            clientConfig: getClientConfig(clientSecureSocketpath, clientSecureSocketpassword)
-        },
-        secureSocket: getServerCert(serverCert)
-    });
-
-    if apimClient is error {
-        log:printError("Error occurred while creating the client: ", apimClient);
-        return apimClient;
-    }
-
-    Service[]|error services = retrieveAllExisitingservices(apimClient, artifacts);
-    if services is error {
-        log:printError("Error occurred while retrieving existing services: ", services);
-        return services;
-    }
-
-    error? removeResult = removeExistingServices(apimClient, services);
-    if removeResult is error {
-        log:printError("Error occurred while removing existing services: ", removeResult);
-        return removeResult;
-    }   
-
     error? e = ();
     foreach ServiceArtifact artifact in artifacts {
         Service|error res = apimClient->/services.post({
@@ -155,4 +140,13 @@ function removeExistingServices(Client apimClient, Service[] services) returns e
             return response;
         }
     }
+}
+
+function findAndRemoveExistingServices(Client apimClient, ServiceArtifact[] artifacts) returns error? {
+    Service[]|error existingServices = retrieveAllExisitingservices(apimClient, artifacts);
+    if existingServices is error {
+        return existingServices;
+    }
+
+    return removeExistingServices(apimClient, existingServices);
 }

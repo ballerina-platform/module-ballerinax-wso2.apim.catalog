@@ -17,14 +17,16 @@
 public class Listener {
     int port;
     public function 'start() returns error? {
-        ServiceArtifact[] artifacts = getArtifacts();
+        artifacts = getArtifacts();
         check publishArtifacts(artifacts);
     }
 
     public function gracefulStop() returns error? {
+        check findAndRemoveExistingServices(apimClient, artifacts);
     }
 
     public function immediateStop() returns error? {
+        check findAndRemoveExistingServices(apimClient, artifacts);
     }
 
     public function detach(service object {} s) returns error? {
