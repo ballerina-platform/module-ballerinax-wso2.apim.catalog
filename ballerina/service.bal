@@ -31,7 +31,9 @@ configurable string clientSecureSocketpassword = "";
 configurable string? serverCert = ();
 configurable string[] scopes = ["service_catalog:service_view", "apim:api_view", "service_catalog:service_write"];
 
-listener Listener 'listener = new Listener(port);
+listener Listener 'listener = new Listener();
+
+final string[] publishedServiceIds = [];
 
 Client apimClient = check new (serviceUrl = serviceUrl, config = {
     auth: {
@@ -45,12 +47,6 @@ Client apimClient = check new (serviceUrl = serviceUrl, config = {
     },
     secureSocket: getServerCert(serverCert)
 });
-
-ServiceArtifact[] artifacts = [];
-
-service / on 'listener {
-
-}
 
 function publishArtifacts(ServiceArtifact[] artifacts) returns error? {
     error? e = ();
@@ -73,7 +69,15 @@ function publishArtifacts(ServiceArtifact[] artifacts) returns error? {
         // If there is an error, wait until other artifacts get published
         if res is error {
             e = res;
+            continue;
         }
+
+        string? id = res?.id;
+        if id == () {
+            continue;
+        }
+
+        publishedServiceIds.push(id);
     }
     return e;
 }
@@ -97,56 +101,12 @@ function getServerCert(string? serverCert) returns http:ClientSecureSocket? {
     return {enable: false};
 }
 
-function retrieveAllExisitingservices(Client apimClient, ServiceArtifact[] artifacts) returns Service[]|error {
-    Service[] services = [];
-    string serviceKeys = getCommaSeparatedServiceKeys(artifacts);
-    int offset = 0;
-    int 'limit = 25;
-    while true {
-        ServiceList|error serviceList = apimClient->/services(key = serviceKeys, offset = offset, 'limit = 'limit);
-        if serviceList is error {
-            log:printError("Error occurred while retrieving existing services: ", serviceList);
-            return serviceList;
-        }
-
-        Service[]? fetchedServices = serviceList.list;
-        Pagination? pagination = serviceList.pagination;
-        if fetchedServices != () {
-            services.push(...fetchedServices);
-        }
-
-        string? next = pagination?.next;
-        if next == () || next == "" {
-            break;
-        }
-
-        offset += 'limit;
-    }
-
-    return services;
-}
-
-function removeExistingServices(Client apimClient, Service[] services) returns error? {
-    foreach Service serviceObject in services {
-        string? id = serviceObject.id;
-        if id == () {
-            log:printWarn("Service ID is not available for service: " + serviceObject.serviceKey.toBalString());
-            continue;
-        }
-
+function removeExistingServices(Client apimClient) returns error? {
+    foreach string id in publishedServiceIds {
         http:Response|error response = apimClient->/services/[id].delete();
         if response is error {
             log:printError("Error occurred while deleting existing service: ", response);
             return response;
         }
     }
-}
-
-function findAndRemoveExistingServices(Client apimClient, ServiceArtifact[] artifacts) returns error? {
-    Service[]|error existingServices = retrieveAllExisitingservices(apimClient, artifacts);
-    if existingServices is error {
-        return existingServices;
-    }
-
-    return removeExistingServices(apimClient, existingServices);
 }
