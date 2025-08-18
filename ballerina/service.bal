@@ -130,7 +130,8 @@ function retrieveAllExisitingservices(Client apimClient, ServiceArtifact[] artif
             services.push(...fetchedServices);
         }
 
-        if pagination?.next == () {
+        string? next = pagination?.next;
+        if next == () || next == "" {
             break;
         }
 
