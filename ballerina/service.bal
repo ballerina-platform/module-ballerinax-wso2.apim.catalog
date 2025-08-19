@@ -31,7 +31,7 @@ configurable string clientSecureSocketpassword = "";
 configurable string? serverCert = ();
 configurable string[] scopes = ["service_catalog:service_view", "apim:api_view", "service_catalog:service_write"];
 
-listener Listener 'listener = new Listener();
+listener Listener 'listener = new Listener(port);
 
 final string[] publishedServiceIds = [];
 

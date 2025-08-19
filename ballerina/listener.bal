@@ -15,6 +15,7 @@
 // under the License.
 
 public class Listener {
+    int port;
     public function 'start() returns error? {
         ServiceArtifact[] artifacts = getArtifacts();
         check publishArtifacts(artifacts);
@@ -32,5 +33,9 @@ public class Listener {
     }
 
     public function attach(service object {} s, string[]? name = ()) returns error? {
+    }
+
+    public function init(int port) {
+        self.port = port;
     }
 }
