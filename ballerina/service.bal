@@ -33,29 +33,22 @@ configurable string[] scopes = ["service_catalog:service_view", "apim:api_view",
 
 listener Listener 'listener = new Listener(port);
 
-service / on 'listener {
+final string[] publishedServiceIds = [];
 
-}
+Client apimClient = check new (serviceUrl = serviceUrl, config = {
+    auth: {
+        username,
+        tokenUrl,
+        password,
+        clientId,
+        clientSecret,
+        scopes,
+        clientConfig: getClientConfig(clientSecureSocketpath, clientSecureSocketpassword)
+    },
+    secureSocket: getServerCert(serverCert)
+});
 
 function publishArtifacts(ServiceArtifact[] artifacts) returns error? {
-    Client|error apimClient = new (serviceUrl = serviceUrl, config = {
-        auth: {
-            username,
-            tokenUrl,
-            password,
-            clientId,
-            clientSecret,
-            scopes,
-            clientConfig: getClientConfig(clientSecureSocketpath, clientSecureSocketpassword)
-        },
-        secureSocket: getServerCert(serverCert)
-    });
-
-    if apimClient is error {
-        log:printError("Error occurred while creating the client: ", apimClient);
-        return apimClient;
-    }
-
     error? e = ();
     foreach ServiceArtifact artifact in artifacts {
         Service|error res = apimClient->/services.post({
@@ -76,7 +69,15 @@ function publishArtifacts(ServiceArtifact[] artifacts) returns error? {
         // If there is an error, wait until other artifacts get published
         if res is error {
             e = res;
+            continue;
         }
+
+        string? id = res?.id;
+        if id == () {
+            continue;
+        }
+
+        publishedServiceIds.push(id);
     }
     return e;
 }
@@ -98,4 +99,20 @@ function getServerCert(string? serverCert) returns http:ClientSecureSocket? {
         return {cert: serverCert};
     }
     return {enable: false};
+}
+
+function removeExistingServices(Client apimClient) returns error? {
+    foreach string id in publishedServiceIds {
+        http:Response|error response = apimClient->/services/[id].delete();
+        if response is error {
+            log:printError("Error occurred while deleting the service: ", response, serviceId = id);
+            return response;
+        }
+
+        if response.statusCode != 204 {
+            string responseMessage = (check response.getJsonPayload()).toJsonString();
+            log:printError("Failed to delete service: ", serviceId = id, message = responseMessage);
+            return error("Failed to delete the service with id: " + id, cause = responseMessage);
+        }
+    }
 }

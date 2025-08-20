@@ -22,9 +22,11 @@ public class Listener {
     }
 
     public function gracefulStop() returns error? {
+        check removeExistingServices(apimClient);
     }
 
     public function immediateStop() returns error? {
+        check removeExistingServices(apimClient);
     }
 
     public function detach(service object {} s) returns error? {
