@@ -38,9 +38,11 @@ import io.swagger.v3.oas.models.OpenAPI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import static io.ballerina.wso2.apim.catalog.utils.Constants.BALLERINA;
 import static io.ballerina.wso2.apim.catalog.utils.Constants.HTTP_PACKAGE_NAME;
+import static io.ballerina.wso2.apim.catalog.utils.Constants.SLASH;
 import static io.ballerina.wso2.apim.catalog.utils.Utils.createMd5Hash;
 import static io.ballerina.wso2.apim.catalog.utils.Utils.generateBasePath;
 import static io.ballerina.wso2.apim.catalog.utils.Utils.getDefinitionType;
@@ -178,10 +180,12 @@ public final class ServiceCatalog {
     }
 
     private static void updateServiceUrl(BMap<BString, Object> artifactValues, HttpServiceConfig httpServiceConfig) {
-        String basePath = httpServiceConfig.basePath.equals(LOCALHOST) ? "" : httpServiceConfig.basePath;
+        String basePathConfig = httpServiceConfig.basePath;
+        String basePath = basePathConfig.equals(SLASH) ? "" : basePathConfig;
+        boolean isLocalHost = Objects.equals(httpServiceConfig.host, LOCALHOST);
         artifactValues.put(StringUtils.fromString(SERVICE_URL),
                 StringUtils.fromString(httpServiceConfig.host +
-                        COLON + httpServiceConfig.port + basePath));
+                        (isLocalHost ? (COLON + httpServiceConfig.port) : "") + basePath));
         artifactValues.put(StringUtils.fromString(DEFINITION_URL),
                 StringUtils.fromString(httpServiceConfig.definitionUrl));
     }
