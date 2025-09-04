@@ -11,7 +11,7 @@ graalvmCompatible = true
 groupId = "io.ballerina"
 artifactId = "wso2.apim.catalog-native"
 version = "1.1.2"
-path = "../native/build/libs/wso2.apim.catalog-native-1.1.2-SNAPSHOT.jar"
+path = "../native/build/libs/wso2.apim.catalog-native-1.1.2.jar"
 
 [[platform.java21.dependency]]
 groupId = "com.fasterxml.jackson.core"
