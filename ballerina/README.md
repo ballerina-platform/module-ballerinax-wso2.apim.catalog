@@ -1,8 +1,13 @@
-# Ballerina WSO2 APIM Catalog Publisher
-
 ## Overview
 
-The Ballerina WSO2 APIM catalog publisher module includes ballerina service management tools for publishing service data to WSO2 API manager service catalogs.
+The WSO2 APIM Catalog Publisher connector provides service management tools for publishing service data to [WSO2 API Manager](https://wso2.com/api-manager/) service catalogs.
+
+### Key Features
+
+- Publish service metadata to WSO2 API Manager service catalogs automatically
+- OAuth 2.0 authentication with WSO2 APIM
+- Seamless integration with Ballerina HTTP services
+- Remote management support via build options
 
 ## Quickstart
 
