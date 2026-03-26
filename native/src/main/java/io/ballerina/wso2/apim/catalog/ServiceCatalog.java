@@ -38,8 +38,6 @@ import io.swagger.v3.oas.models.OpenAPI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
 
 import static io.ballerina.wso2.apim.catalog.utils.Constants.BALLERINA;
 import static io.ballerina.wso2.apim.catalog.utils.Constants.CONTROL_PLANE_PACKAGE_NAME;
@@ -181,10 +179,8 @@ public final class ServiceCatalog {
     }
 
     private static void updateServiceName(BMap<BString, Object> artifactValues, HttpServiceConfig httpServiceConfig) {
-        String uniqueSuffix = UUID.randomUUID().toString().replace("-", "").
-                substring(0, 10).toUpperCase(Locale.ROOT); // To temporarily resolve service name uniqueness conflicts
         artifactValues.put(StringUtils.fromString(NAME),
-                StringUtils.fromString(httpServiceConfig.basePath + uniqueSuffix));
+                StringUtils.fromString(httpServiceConfig.basePath));
     }
 
     private static void updateServiceUrl(BMap<BString, Object> artifactValues, HttpServiceConfig httpServiceConfig) {
