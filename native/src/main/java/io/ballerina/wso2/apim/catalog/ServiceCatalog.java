@@ -88,6 +88,9 @@ public final class ServiceCatalog {
         BArray arrayValue = ValueCreator.createArrayValue(arrayType);
 
         for (Artifact artifact : env.getRepository().getArtifacts()) {
+            if (artifact.type != Artifact.ArtifactType.SERVICE) {
+                continue;
+            }
             Object serviceObj = artifact.getDetail(Constants.SERVICE);
             Type originalType = ((BObject) serviceObj).getOriginalType();
             Module module = originalType.getPackage();
