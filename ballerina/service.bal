@@ -29,6 +29,11 @@ configurable string? clientSecureSocketpath = ();
 configurable string clientSecureSocketpassword = "";
 configurable string? serverCert = ();
 configurable string[] scopes = ["service_catalog:service_view", "apim:api_view", "service_catalog:service_write"];
+# External base URL registered with WSO2 APIM Service Catalog in place of the
+# auto-derived `http://localhost:<port>`. Must be an absolute URL containing the
+# scheme and host with an optional port
+# (e.g. `http://my-alb.example.com` or `https://ingress.example.com:8443`).
+# No trailing slash. No path component.
 configurable string? registeredServiceBaseUrl = ();
 
 listener Listener 'listener = new Listener(port);
@@ -79,9 +84,14 @@ function getServiceIdByKey(string serviceKey) returns string|error|() {
 
 function publishOrUpdateService(ServiceArtifact artifact) returns Service|error {
     string|() serviceId = check getServiceIdByKey(artifact.serviceKey);
-    string resolvedServiceUrl = registeredServiceBaseUrl is string
-        ? string `${<string>registeredServiceBaseUrl}${artifact.name}`
-        : artifact.serviceUrl;
+    string resolvedServiceUrl = artifact.serviceUrl;
+    string? baseUrlConfig = registeredServiceBaseUrl;
+    if baseUrlConfig is string && baseUrlConfig.length() > 0 {
+        string base = baseUrlConfig.endsWith("/")
+            ? baseUrlConfig.substring(0, baseUrlConfig.length() - 1)
+            : baseUrlConfig;
+        resolvedServiceUrl = base + artifact.name;
+    }
     if serviceId is () {
         return apimClient->/services.post({
             serviceMetadata: {
