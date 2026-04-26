@@ -29,6 +29,7 @@ configurable string? clientSecureSocketpath = ();
 configurable string clientSecureSocketpassword = "";
 configurable string? serverCert = ();
 configurable string[] scopes = ["service_catalog:service_view", "apim:api_view", "service_catalog:service_write"];
+configurable string? registeredServiceBaseUrl = ();
 
 listener Listener 'listener = new Listener(port);
 
@@ -78,18 +79,21 @@ function getServiceIdByKey(string serviceKey) returns string|error|() {
 
 function publishOrUpdateService(ServiceArtifact artifact) returns Service|error {
     string|() serviceId = check getServiceIdByKey(artifact.serviceKey);
+    string resolvedServiceUrl = registeredServiceBaseUrl is string
+        ? string `${<string>registeredServiceBaseUrl}${artifact.name}`
+        : artifact.serviceUrl;
     if serviceId is () {
-            return apimClient->/services.post({
+        return apimClient->/services.post({
             serviceMetadata: {
                 name: artifact.name,
                 description: artifact.description,
                 'version: artifact.version,
                 serviceKey: artifact.serviceKey,
-                serviceUrl: artifact.serviceUrl,
+                serviceUrl: resolvedServiceUrl,
                 definitionType: artifact.definitionType,
                 securityType: artifact.securityType,
                 mutualSSLEnabled: artifact.mutualSSLEnabled,
-                definitionUrl: artifact.definitionUrl
+                definitionUrl: resolvedServiceUrl
             },
             inlineContent: artifact.definitionFileContent
         });
@@ -100,11 +104,11 @@ function publishOrUpdateService(ServiceArtifact artifact) returns Service|error 
             description: artifact.description,
             'version: artifact.version,
             serviceKey: artifact.serviceKey,
-            serviceUrl: artifact.serviceUrl,
+            serviceUrl: resolvedServiceUrl,
             definitionType: artifact.definitionType,
             securityType: artifact.securityType,
             mutualSSLEnabled: artifact.mutualSSLEnabled,
-            definitionUrl: artifact.definitionUrl
+            definitionUrl: resolvedServiceUrl
         },
         inlineContent: artifact.definitionFileContent
     });
