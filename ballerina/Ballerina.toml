@@ -1,7 +1,7 @@
 [package]
 org = "ballerinax"
 name = "wso2.apim.catalog"
-version = "1.2.3"
+version = "1.2.5"
 keywords = ["Type/Connector", "Type/Trigger", "Vendor/WSO2", "Area/Developer Tools"]
 distribution = "2201.13.1"
 
@@ -11,8 +11,8 @@ graalvmCompatible = true
 [[platform.java21.dependency]]
 groupId = "io.ballerina"
 artifactId = "wso2.apim.catalog-native"
-version = "1.2.3"
-path = "../native/build/libs/wso2.apim.catalog-native-1.2.3-SNAPSHOT.jar"
+version = "1.2.5"
+path = "../native/build/libs/wso2.apim.catalog-native-1.2.5-SNAPSHOT.jar"
 
 [[platform.java21.dependency]]
 groupId = "com.fasterxml.jackson.core"
