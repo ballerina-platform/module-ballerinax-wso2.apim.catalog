@@ -119,7 +119,7 @@ function publishOrUpdateService(ServiceArtifact artifact) returns Service|error 
         string base = effectiveBase.endsWith("/")
             ? effectiveBase.substring(0, effectiveBase.length() - 1)
             : effectiveBase;
-        resolvedServiceUrl = base + artifact.name;
+        resolvedServiceUrl = artifact.name.startsWith("/") ? base + artifact.name : base + "/" + artifact.name;
     }
     if serviceId is () {
         return apimClient->/services.post({
