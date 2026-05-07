@@ -33,14 +33,14 @@ configurable string[] scopes = ["service_catalog:service_view", "apim:api_view",
 # Catalog, replacing the auto-derived `http://localhost:<port>`. Use this when
 # all services are reachable through the same load balancer or ingress.
 # Overridden per-service by `registeredServiceBaseUrls`.
-configurable string? registeredServiceBaseUrl = ();
+configurable string? registeredServiceHostUrl = ();
 # Per-listener external base URL map, keyed by `"host:port"`
 # (e.g. `"localhost:9090"`). All services attached to that listener are
 # registered using the mapped base URL. Takes precedence over
 # `registeredServiceBaseUrl` for matching listeners. Use this when individual
 # listeners are reachable through different load balancers or external hosts.
 # Same format rules as `registeredServiceBaseUrl` apply to each value.
-configurable map<string> registeredServiceBaseUrls = {};
+configurable map<string> registeredServiceHostUrls = {};
 
 listener Listener 'listener = new Listener(port);
 
@@ -104,7 +104,7 @@ function publishOrUpdateService(ServiceArtifact artifact) returns Service|error 
     // characters in map keys when the Config.toml key was a quoted string.
     // Normalise each key by stripping those quotes before comparing.
     string? perServiceBase = ();
-    foreach [string, string] [k, v] in registeredServiceBaseUrls.entries() {
+    foreach [string, string] [k, v] in registeredServiceHostUrls.entries() {
         string normalizedKey = (k.length() > 1 && k.startsWith("\"") && k.endsWith("\""))
             ? k.substring(1, k.length() - 1)
             : k;
@@ -114,7 +114,7 @@ function publishOrUpdateService(ServiceArtifact artifact) returns Service|error 
         }
     }
     // Per-service map takes precedence; fall back to the global single value.
-    string? effectiveBase = perServiceBase ?: registeredServiceBaseUrl;
+    string? effectiveBase = perServiceBase ?: registeredServiceHostUrl;
     if effectiveBase is string && effectiveBase.length() > 0 {
         string base = effectiveBase.endsWith("/")
             ? effectiveBase.substring(0, effectiveBase.length() - 1)
