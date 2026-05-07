@@ -29,12 +29,18 @@ configurable string? clientSecureSocketpath = ();
 configurable string clientSecureSocketpassword = "";
 configurable string? serverCert = ();
 configurable string[] scopes = ["service_catalog:service_view", "apim:api_view", "service_catalog:service_write"];
-# External base URL registered with WSO2 APIM Service Catalog in place of the
-# auto-derived `http://localhost:<port>`. Must be an absolute URL containing the
-# scheme and host with an optional port
-# (e.g. `http://my-alb.example.com` or `https://ingress.example.com:8443`).
-# No trailing slash. No path component.
+# External base URL applied to every service registered in the APIM Service
+# Catalog, replacing the auto-derived `http://localhost:<port>`. Use this when
+# all services are reachable through the same load balancer or ingress.
+# Overridden per-service by `registeredServiceBaseUrls`.
 configurable string? registeredServiceBaseUrl = ();
+# Per-listener external base URL map, keyed by `"host:port"`
+# (e.g. `"localhost:9090"`). All services attached to that listener are
+# registered using the mapped base URL. Takes precedence over
+# `registeredServiceBaseUrl` for matching listeners. Use this when individual
+# listeners are reachable through different load balancers or external hosts.
+# Same format rules as `registeredServiceBaseUrl` apply to each value.
+configurable map<string> registeredServiceBaseUrls = {};
 
 listener Listener 'listener = new Listener(port);
 
@@ -85,11 +91,34 @@ function getServiceIdByKey(string serviceKey) returns string|error|() {
 function publishOrUpdateService(ServiceArtifact artifact) returns Service|error {
     string|() serviceId = check getServiceIdByKey(artifact.serviceKey);
     string resolvedServiceUrl = artifact.serviceUrl;
-    string? baseUrlConfig = registeredServiceBaseUrl;
-    if baseUrlConfig is string && baseUrlConfig.length() > 0 {
-        string base = baseUrlConfig.endsWith("/")
-            ? baseUrlConfig.substring(0, baseUrlConfig.length() - 1)
-            : baseUrlConfig;
+    // Derive "host:port" listener key from the auto-derived serviceUrl
+    // ("http://host:port/basePath"): strip scheme then take up to the first "/".
+    string withoutScheme = artifact.serviceUrl.startsWith("http://")
+        ? artifact.serviceUrl.substring(7)
+        : artifact.serviceUrl;
+    int? slashPos = withoutScheme.indexOf("/");
+    string serviceIdentifier = slashPos is int
+        ? withoutScheme.substring(0, slashPos)
+        : withoutScheme;
+    // Ballerina's TOML parser includes surrounding double-quotes as literal
+    // characters in map keys when the Config.toml key was a quoted string.
+    // Normalise each key by stripping those quotes before comparing.
+    string? perServiceBase = ();
+    foreach [string, string] [k, v] in registeredServiceBaseUrls.entries() {
+        string normalizedKey = (k.length() > 1 && k.startsWith("\"") && k.endsWith("\""))
+            ? k.substring(1, k.length() - 1)
+            : k;
+        if normalizedKey == serviceIdentifier {
+            perServiceBase = v;
+            break;
+        }
+    }
+    // Per-service map takes precedence; fall back to the global single value.
+    string? effectiveBase = perServiceBase ?: registeredServiceBaseUrl;
+    if effectiveBase is string && effectiveBase.length() > 0 {
+        string base = effectiveBase.endsWith("/")
+            ? effectiveBase.substring(0, effectiveBase.length() - 1)
+            : effectiveBase;
         resolvedServiceUrl = base + artifact.name;
     }
     if serviceId is () {
