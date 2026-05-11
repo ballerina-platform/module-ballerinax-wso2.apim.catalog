@@ -29,18 +29,19 @@ configurable string? clientSecureSocketpath = ();
 configurable string clientSecureSocketpassword = "";
 configurable string? serverCert = ();
 configurable string[] scopes = ["service_catalog:service_view", "apim:api_view", "service_catalog:service_write"];
-# External base URL applied to every service registered in the APIM Service
-# Catalog, replacing the auto-derived `http://localhost:<port>`. Use this when
-# all services are reachable through the same load balancer or ingress.
-# Overridden per-service by `registeredServiceBaseUrls`.
-configurable string? registeredServiceHostUrl = ();
-# Per-listener external base URL map, keyed by `"host:port"`
-# (e.g. `"localhost:9090"`). All services attached to that listener are
-# registered using the mapped base URL. Takes precedence over
-# `registeredServiceBaseUrl` for matching listeners. Use this when individual
-# listeners are reachable through different load balancers or external hosts.
-# Same format rules as `registeredServiceBaseUrl` apply to each value.
-configurable map<string> registeredServiceHostUrls = {};
+# Controls the serviceUrl registered in the APIM Service Catalog.
+# Accepts either a single string or a map of strings:
+#
+# - `string`: one base URL applied to every service
+#   (e.g. `registeredServiceHostUrl = "http://my-alb.example.com"`)
+#
+# - `map<string>`: per-listener base URLs, keyed by `"host:port"`
+#   (e.g. `"localhost:9090" = "http://alb-a.example.com"`).
+#   All services on that listener are registered under the mapped base URL.
+#
+# Each value must be an absolute URL with scheme and host (optional port).
+# No trailing slash. No path component.
+configurable string|map<string>|() registeredServiceHostUrl = ();
 
 listener Listener 'listener = new Listener(port);
 
@@ -100,21 +101,23 @@ function publishOrUpdateService(ServiceArtifact artifact) returns Service|error 
     string serviceIdentifier = slashPos is int
         ? withoutScheme.substring(0, slashPos)
         : withoutScheme;
-    // Ballerina's TOML parser includes surrounding double-quotes as literal
-    // characters in map keys when the Config.toml key was a quoted string.
-    // Normalise each key by stripping those quotes before comparing.
-    string? perServiceBase = ();
-    foreach [string, string] [k, v] in registeredServiceHostUrls.entries() {
-        string normalizedKey = (k.length() > 1 && k.startsWith("\"") && k.endsWith("\""))
-            ? k.substring(1, k.length() - 1)
-            : k;
-        if normalizedKey == serviceIdentifier {
-            perServiceBase = v;
-            break;
+    string? effectiveBase = ();
+    string|map<string>|() hostUrlConfig = registeredServiceHostUrl;
+    if hostUrlConfig is string {
+        effectiveBase = hostUrlConfig;
+    } else if hostUrlConfig is map<string> {
+        // Ballerina's TOML parser includes surrounding double-quotes as literal
+        // characters in map keys for quoted TOML keys. Normalise before comparing.
+        foreach [string, string] [k, v] in hostUrlConfig.entries() {
+            string normalizedKey = (k.length() > 1 && k.startsWith("\"") && k.endsWith("\""))
+                ? k.substring(1, k.length() - 1)
+                : k;
+            if normalizedKey == serviceIdentifier {
+                effectiveBase = v;
+                break;
+            }
         }
     }
-    // Per-service map takes precedence; fall back to the global single value.
-    string? effectiveBase = perServiceBase ?: registeredServiceHostUrl;
     if effectiveBase is string && effectiveBase.length() > 0 {
         string base = effectiveBase.endsWith("/")
             ? effectiveBase.substring(0, effectiveBase.length() - 1)
