@@ -94,9 +94,12 @@ function publishOrUpdateService(ServiceArtifact artifact) returns Service|error 
     string resolvedServiceUrl = artifact.serviceUrl;
     // Derive "host:port" listener key from the auto-derived serviceUrl
     // ("http://host:port/basePath"): strip scheme then take up to the first "/".
-    string withoutScheme = artifact.serviceUrl.startsWith("http://")
-        ? artifact.serviceUrl.substring(7)
-        : artifact.serviceUrl;
+    string withoutScheme = artifact.serviceUrl;
+    if withoutScheme.startsWith("https://") {
+        withoutScheme = withoutScheme.substring(8);
+    } else if withoutScheme.startsWith("http://") {
+        withoutScheme = withoutScheme.substring(7);
+    }
     int? slashPos = withoutScheme.indexOf("/");
     string serviceIdentifier = slashPos is int
         ? withoutScheme.substring(0, slashPos)
