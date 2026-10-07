@@ -16,10 +16,20 @@
  */
 
 import org.apache.tools.ant.taskdefs.condition.Os
+import org.gradle.process.ExecOperations
+
+import javax.inject.Inject
 
 plugins {
     id 'groovy'
 }
+
+abstract class BallerinaTestsExecHelper {
+    @Inject
+    abstract ExecOperations getExecOperations()
+}
+
+def execHelper = project.objects.newInstance(BallerinaTestsExecHelper)
 
 description = 'WSO2 API manager server catalog module Integration Tests'
 
@@ -55,7 +65,7 @@ task updateTomlVerions {
 
 task commitTomlFiles {
     doLast {
-        project.exec {
+        execHelper.execOperations.exec {
             ignoreExitValue true
             if (Os.isFamily(Os.FAMILY_WINDOWS)) {
                 commandLine 'cmd', '/c', "git commit -m \"[Automated] Update the native jar versions\" Ballerina.toml Dependencies.toml"
@@ -101,7 +111,7 @@ def ballerinaPackagePath = "ballerina"
 
 task buildMockServerDockerImage {
     doLast {
-        exec {
+        execHelper.execOperations.exec {
             workingDir "${project.projectDir}/mock-server"
             commandLine 'docker', 'build', '-t', 'ballerinax/apim-catalog-mock-server:latest', '.'
         }
@@ -110,7 +120,7 @@ task buildMockServerDockerImage {
 
 task buildTokenServerDockerImage {
     doLast {
-        exec {
+        execHelper.execOperations.exec {
             workingDir "${project.projectDir}/token-server"
             commandLine 'docker', 'build', '-t', 'ballerinax/apim-catalog-token-server:latest', '.'
         }
@@ -125,7 +135,7 @@ task buildDockerImages {
 task publishTestResourcePackageToLocal {
     dependsOn("::${packageName}-ballerina:build")
     doLast {
-        exec {
+        execHelper.execOperations.exec {
             workingDir "${project.rootDir}/${ballerinaPackagePath}"
             if (Os.isFamily(Os.FAMILY_WINDOWS)) {
                 commandLine 'cmd', '/c', "${distributionBinPath}/bal.bat pack && exit  %%ERRORLEVEL%%"
@@ -134,7 +144,7 @@ task publishTestResourcePackageToLocal {
             }
         }
 
-        exec {
+        execHelper.execOperations.exec {
             workingDir "${project.rootDir}/${ballerinaPackagePath}"
             if (Os.isFamily(Os.FAMILY_WINDOWS)) {
                 commandLine 'cmd', '/c', "${distributionBinPath}/bal.bat push --repository=local" +
@@ -155,7 +165,7 @@ task ballerinaTest {
     finalizedBy(commitTomlFiles)
 
     doLast {
-        exec {
+        execHelper.execOperations.exec {
             workingDir project.projectDir
             environment "JAVA_OPTS", "-DBALLERINA_DEV_COMPILE_BALLERINA_ORG=true"
             if (Os.isFamily(Os.FAMILY_WINDOWS)) {
