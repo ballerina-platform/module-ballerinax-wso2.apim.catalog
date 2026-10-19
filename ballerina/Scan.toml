@@ -1,0 +1,8 @@
+# ballerina:13 and ballerina:14 are false positives. They match identifier names containing words such as
+# "password", "secret", "token" or "auth", not actual secret values:
+#  - service.bal / types.bal: configurables and public record fields (username, password, clientSecret, tokenUrl,
+#    clientSecureSocketpassword, ...) default to "", (), or a URL. No credential is embedded. Making them
+#    required or renaming them would change the public API / configuration surface.
+#  - client.bal: `auth: config.auth` just forwards a caller-supplied record field to the HTTP client config.
+[rule]
+exclude = ["ballerina:13", "ballerina:14"]
