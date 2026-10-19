@@ -2,7 +2,7 @@
 
 [![Build](https://github.com/ballerina-platform/module-ballerinax-wso2.apim.catalog/actions/workflows/build-timestamped-master.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-wso2.apim.catalog/actions/workflows/build-timestamped-master.yml)
 [![codecov](https://codecov.io/gh/ballerina-platform/module-ballerinax-wso2.apim.catalog/branch/main/graph/badge.svg)](https://codecov.io/gh/ballerina-platform/module-ballerinax-wso2.apim.catalog)
-[![Trivy](https://github.com/ballerina-platform/module-ballerinax-wso2.apim.catalog/actions/workflows/trivy-scan.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-wso2.apim.catalog/actions/workflows/trivy-scan.yml)
+[![Security Scan](https://github.com/ballerina-platform/module-ballerinax-wso2.apim.catalog/actions/workflows/security-scan.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-wso2.apim.catalog/actions/workflows/security-scan.yml)
 [![GraalVM Check](https://github.com/ballerina-platform/module-ballerinax-wso2.apim.catalog/actions/workflows/build-with-bal-test-graalvm.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-wso2.apim.catalog/actions/workflows/build-with-bal-test-graalvm.yml)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerinax-wso2.apim.catalog.svg)](https://github.com/ballerina-platform/module-ballerinax-wso2.apim.catalog/commits/master)
 [![Github issues](https://img.shields.io/github/issues/ballerina-platform/ballerina-standard-library/module/wso2.apim.catalog.svg?label=Open%20Issues)](https://github.com/ballerina-platform/ballerina-standard-library/labels/module%2Fwso2.apim.catalog)
