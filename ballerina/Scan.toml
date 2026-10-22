@@ -4,5 +4,8 @@
 #    clientSecureSocketpassword, ...) default to "", (), or a URL. No credential is embedded. Making them
 #    required or renaming them would change the public API / configuration surface.
 #  - client.bal: `auth: config.auth` just forwards a caller-supplied record field to the HTTP client config.
+# TODO: replace this rule exclusion with a targeted scan suppression (with a reason) once `bal scan` supports it
+# (planned for v0.13.0), and fix the false positives on the scan tool side: a secret-named identifier should only be
+# reported when it is assigned a fixed value.
 [rule]
 exclude = ["ballerina:13", "ballerina:14"]
